@@ -16,10 +16,10 @@
 lang: en-US
 title: ENGL-341
 email:
-description:
+description: Tabletop Games - Narrative, History, Design
 baseurl: # the optional subpath of your site, e.g. "/blog"
 url: # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
-author:
+author: Dr. Steven Gotzler
   name:
   twitter:
   picture:
