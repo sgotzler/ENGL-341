@@ -1,0 +1,40 @@
+title: ENGL 341
+subtitle: Tabletop Games — Narrative, History, and Design
+description: >-
+  Course website for ENGL 341, Fall 2026.
+  An undergraduate course on tabletop games as cultural objects with
+  histories, meanings, and consequences. Taught by Dr. Steven Gotzler,
+  UNC Chapel Hill.
+
+# baseurl is set so the site works whether served at the root of
+# username.github.io or at username.github.io/ENGL-341/. Update if needed.
+baseurl: "/ENGL-341"
+url: "https://sgotzler.github.io"
+
+semester: "Fall 2026"
+meeting: "T 3:30–6:30 PM"
+room: "Greenlaw Gameroom (GL 316)"
+
+contact:
+  name: Dr. Steven Gotzler
+  title: Teaching Assistant Professor
+  department: English & Comparative Literature, UNC Chapel Hill
+  office: Greenlaw Hall 313
+  office_hours: TBD
+  email: sgotzler@unc.edu
+  zoom: https://unc.zoom.us/j/6036637992
+  podcast:
+    name: "Subject Matter: Tabletop"
+    url: https://www.subjectmattertabletop.org/
+
+# Build settings
+markdown: kramdown
+sass:
+  style: compressed
+  sass_dir: _sass
+plugins: []
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor

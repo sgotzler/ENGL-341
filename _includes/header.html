@@ -1,0 +1,13 @@
+<header id="header" class="site-header{% if page.transparent_header %} transparent{% endif %}">
+  <a href="{{ '/' | relative_url }}" class="brand">
+    <strong>ENGL</strong> 341
+  </a>
+  {% if page.hide_menu %}{% else %}
+  <nav class="site-nav">
+    <a href="#menu" class="menu-toggle" aria-label="Open menu">
+      <span class="menu-icon" aria-hidden="true"></span>
+      <span>Menu</span>
+    </a>
+  </nav>
+  {% endif %}
+</header>

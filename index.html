@@ -1,0 +1,53 @@
+---
+layout: default
+title: Home
+description: ENGL 341 — Tabletop Games, Narrative, History, Design. Fall 2026, UNC Chapel Hill.
+transparent_header: true
+hide_menu: true
+---
+
+<section class="cinematic-hero" style="background-image: url('{{ '/assets/images/hero/landing.jpg' | relative_url }}');">
+  <div class="hero-inner">
+    <p class="eyebrow">ENGL 341</p>
+    <h1>Tabletop Games</h1>
+    <p class="tagline">Narrative, History, and Design</p>
+    <p class="meeting-info">
+      <span>{{ site.semester }}</span><span class="sep">|</span>
+      <span>{{ site.meeting }}</span><span class="sep">|</span>
+      <span>{{ site.room }}</span>
+    </p>
+  </div>
+</section>
+
+<nav class="nav-strip" aria-label="Course sections">
+  <a href="{{ '/overview-and-outline.html' | relative_url }}">Overview &amp; Outline</a>
+  <a href="{{ '/assignments-and-materials.html' | relative_url }}">Assignments &amp; Materials</a>
+  <a href="{{ '/gameplay-activities.html' | relative_url }}">Gameplay Activities</a>
+</nav>
+
+<section class="contact-block">
+  <div class="inner">
+    <h2>Contact &amp; Office Hours</h2>
+    <dl class="contact-grid">
+      <dt>Instructor</dt>
+      <dd>{{ site.contact.name }}<br>
+          <span class="secondary">{{ site.contact.title }}</span><br>
+          <span class="secondary">{{ site.contact.department }}</span></dd>
+
+      <dt>Office</dt>
+      <dd>{{ site.contact.office }}</dd>
+
+      <dt>Office Hours</dt>
+      <dd>{{ site.contact.office_hours }}</dd>
+
+      <dt>Email</dt>
+      <dd><a href="mailto:{{ site.contact.email }}">{{ site.contact.email }}</a></dd>
+
+      <dt>Zoom</dt>
+      <dd><a href="{{ site.contact.zoom }}">{{ site.contact.zoom }}</a></dd>
+
+      <dt>Podcast</dt>
+      <dd><a href="{{ site.contact.podcast.url }}">{{ site.contact.podcast.name }}</a></dd>
+    </dl>
+  </div>
+</section>

@@ -1,0 +1,809 @@
+---
+---
+
+/* =====================================================================
+   ENGL 341 — Course Site
+   Aesthetic adapted from HTML5 UP "Hyperspace" (CC BY 3.0)
+   Headings: League Spartan; Body: Source Sans 3
+   ===================================================================== */
+
+/* Reset / base ------------------------------------------------------ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  margin: 0;
+  font-family: 'Source Sans 3', 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 400;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: #1f2730;
+  background: #ffffff;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+a {
+  color: #E63946;
+  text-decoration: none;
+  border-bottom: dotted 1px rgba(230, 57, 70, 0.5);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+a:hover { color: #B82E38; border-bottom-color: #B82E38; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'League Spartan', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 800;
+  color: #1a2028;
+  line-height: 1.15;
+  margin: 0 0 0.7em 0;
+  letter-spacing: -0.005em;
+}
+h1 { font-size: 2.6rem; }
+h2 { font-size: 1.85rem; }
+h3 { font-size: 1.35rem; font-weight: 700; }
+h4 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; }
+
+p { margin: 0 0 1.2em 0; }
+strong, b { color: #0d141b; font-weight: 600; }
+em, i { color: inherit; }
+
+ul, ol { padding-left: 1.4em; margin: 0 0 1.2em 0; }
+li { margin-bottom: 0.4em; }
+
+hr {
+  border: 0;
+  border-top: solid 1px rgba(0,0,0,0.1);
+  margin: 2.5em 0;
+}
+
+/* Layout helpers ---------------------------------------------------- */
+
+.inner {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Header ------------------------------------------------------------ */
+
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 4rem;
+  padding: 0 2rem;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(6px);
+  border-bottom: solid 1px rgba(0,0,0,0.07);
+}
+
+/* Variant: transparent header on the home page over the cinematic hero */
+.site-header.transparent {
+  background: transparent;
+  border-bottom: 0;
+  backdrop-filter: none;
+}
+.site-header.transparent .brand,
+.site-header.transparent .menu-toggle { color: #ffffff; }
+.site-header.transparent .menu-icon {
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0,        #ffffff 2px,
+    transparent 2px,  transparent 6px,
+    #ffffff 6px,      #ffffff 8px,
+    transparent 8px,  transparent 12px,
+    #ffffff 12px,     #ffffff 14px
+  );
+}
+
+.brand {
+  font-family: 'League Spartan', 'Helvetica Neue', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #1a2028;
+  border: 0;
+  text-transform: uppercase;
+}
+.brand strong { color: inherit; font-weight: 800; }
+
+.menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'League Spartan', 'Helvetica Neue', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #1a2028;
+  border: 0;
+  cursor: pointer;
+}
+.menu-toggle:hover { color: #E63946; }
+.menu-icon {
+  display: inline-block;
+  width: 22px;
+  height: 14px;
+  background: linear-gradient(
+    to bottom,
+    #1a2028 0,        #1a2028 2px,
+    transparent 2px,  transparent 6px,
+    #1a2028 6px,      #1a2028 8px,
+    transparent 8px,  transparent 12px,
+    #1a2028 12px,     #1a2028 14px
+  );
+}
+
+/* Sidebar menu ------------------------------------------------------ */
+
+.menu {
+  position: fixed;
+  top: 0; bottom: 0; right: 0;
+  width: 22rem;
+  max-width: 90vw;
+  background: #ffffff;
+  border-left: solid 1px rgba(0,0,0,0.07);
+  padding: 4rem 2.5rem 2rem 2.5rem;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 200;
+  overflow-y: auto;
+}
+.menu:target { transform: translateX(0); }
+
+.menu h2 {
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #5e6770;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+.menu h3 {
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #5e6770;
+  margin-top: 2.5rem;
+  margin-bottom: 0.8rem;
+  font-weight: 700;
+}
+.menu ul {
+  list-style: none;
+  padding: 0;
+}
+.menu li {
+  border-top: solid 1px rgba(0,0,0,0.07);
+}
+.menu li:first-child { border-top: 0; }
+.menu li a {
+  display: block;
+  padding: 0.85em 0;
+  color: #1a2028;
+  font-family: 'League Spartan', 'Helvetica Neue', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: 0;
+}
+.menu li a:hover { color: #E63946; }
+.menu .contact-list .label {
+  display: inline-block;
+  width: 4rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #5e6770;
+  font-weight: 700;
+}
+.menu-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.4rem;
+  font-size: 2rem;
+  color: #5e6770;
+  border: 0;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 300;
+  line-height: 1;
+}
+.menu-close:hover { color: #1a2028; }
+
+#menu-close-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(26,32,40,0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 150;
+  border: 0;
+}
+.menu:target ~ #menu-close-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Push interior pages below fixed header --------------------------- */
+
+main { padding-top: 0; }
+.page-hero { padding-top: 4rem; } /* leave room for fixed header on inner pages */
+
+/* Cinematic Hero (Home) -------------------------------------------- */
+
+.cinematic-hero {
+  position: relative;
+  min-height: 88vh;
+  background-size: cover;
+  background-position: center;
+  background-color: #1a2028;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  text-align: center;
+  overflow: hidden;
+}
+.cinematic-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      rgba(0,0,0,0.45) 0%,
+      rgba(0,0,0,0.18) 25%,
+      rgba(0,0,0,0.18) 70%,
+      rgba(0,0,0,0.7) 100%);
+}
+.cinematic-hero .hero-inner {
+  position: relative;
+  z-index: 1;
+  padding: 0 2rem;
+  max-width: 64rem;
+  width: 100%;
+}
+.cinematic-hero .eyebrow {
+  font-family: 'League Spartan', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.95);
+  margin: 0 0 1.6em 0;
+}
+.cinematic-hero h1 {
+  color: #ffffff;
+  font-size: 4.4rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.25em 0;
+  text-shadow: 0 2px 28px rgba(0,0,0,0.5);
+}
+.cinematic-hero .tagline {
+  font-family: 'League Spartan', sans-serif;
+  font-style: normal;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.95);
+  margin: 0 0 2.4em 0;
+  text-shadow: 0 1px 16px rgba(0,0,0,0.4);
+}
+.cinematic-hero .meeting-info {
+  font-family: 'League Spartan', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.92);
+}
+.cinematic-hero .meeting-info .sep {
+  color: rgba(255,255,255,0.5);
+  margin: 0 0.7em;
+}
+
+/* Quiet nav strip below the hero ------------------------------------ */
+
+.nav-strip {
+  padding: 2.4rem 0;
+  text-align: center;
+  border-bottom: solid 1px rgba(0,0,0,0.08);
+  background: #ffffff;
+}
+.nav-strip a {
+  display: inline-block;
+  margin: 0 1.6rem;
+  font-family: 'League Spartan', 'Helvetica Neue', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #1a2028;
+  border: 0;
+  padding: 0.4em 0;
+  border-bottom: solid 2px transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.nav-strip a:hover {
+  color: #E63946;
+  border-bottom-color: #E63946;
+}
+@media (max-width: 38rem) {
+  .nav-strip { padding: 1.4rem 0; }
+  .nav-strip a {
+    display: block;
+    margin: 0.55rem 0;
+    font-size: 0.8rem;
+  }
+}
+
+/* Contact section (home) ------------------------------------------- */
+
+.contact-block {
+  padding: 5rem 2rem 6rem;
+  background: #fafbfc;
+}
+.contact-block .inner { max-width: 56rem; }
+.contact-block h2 {
+  text-align: center;
+  margin-bottom: 2.4rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem 3rem;
+  max-width: 44rem;
+  margin: 0 auto;
+}
+@media (min-width: 38rem) {
+  .contact-grid { grid-template-columns: max-content 1fr; }
+}
+.contact-grid dt {
+  font-family: 'League Spartan', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #5e6770;
+  align-self: center;
+}
+.contact-grid dd {
+  margin: 0;
+  align-self: center;
+  color: #1f2730;
+}
+.contact-grid dd .secondary {
+  color: #4a5560;
+  font-size: 0.95em;
+}
+
+/* Page hero (overview, assignments, gameplay) ---------------------- */
+
+.page-hero {
+  position: relative;
+  height: 26rem;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 0;
+}
+.page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(26,32,40,0.55), rgba(26,32,40,0.75));
+}
+.page-hero .hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 0 2rem;
+  max-width: 52rem;
+}
+.page-hero h1 {
+  color: #ffffff;
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 0.3em;
+  text-shadow: 0 2px 18px rgba(0,0,0,0.4);
+}
+.page-hero .tagline {
+  font-family: 'League Spartan', sans-serif;
+  color: rgba(255,255,255,0.95);
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Page body -------------------------------------------------------- */
+
+.page-body { padding: 4.5rem 0 5rem; }
+.page-body .inner { max-width: 60rem; }
+.page-body h2 {
+  margin-top: 2.6em;
+  margin-bottom: 0.7em;
+  font-size: 1.9rem;
+  font-weight: 800;
+}
+.page-body h2:first-child { margin-top: 0; }
+.page-body h3 {
+  margin-top: 2em;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* Schedule (week cards) — bigger images, alternating orientation --- */
+
+.week-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding: 3.5rem 0;
+  border-top: solid 1px rgba(0,0,0,0.08);
+  align-items: center;
+}
+.week-card:first-of-type {
+  border-top: solid 2px #1a2028;
+  padding-top: 4rem;
+}
+@media (min-width: 48rem) {
+  .week-card {
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5rem;
+  }
+  /* Alternate: even-numbered weeks place image on the right */
+  .week-card:nth-of-type(even) .week-image  { grid-column: 2; grid-row: 1; }
+  .week-card:nth-of-type(even) .week-content { grid-column: 1; grid-row: 1; }
+}
+.week-card .week-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 2px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+}
+.week-card .week-content h3 {
+  margin: 0 0 0.4em 0;
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.005em;
+}
+.week-card .week-content .week-tagline {
+  font-style: italic;
+  color: #4a5560;
+  font-size: 1.05rem;
+  margin: 0 0 1.4em 0;
+  line-height: 1.4;
+}
+.week-card .session {
+  margin: 0.5em 0;
+  color: #1f2730;
+}
+.week-card .session .day-date {
+  display: inline-block;
+  font-family: 'League Spartan', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  color: #1a2028;
+  margin-right: 0.5em;
+}
+.week-card .due {
+  margin: 0.7em 0;
+  padding: 0.55em 0.9em;
+  background: #FCEBED;
+  border-left: solid 3px #E63946;
+  font-size: 0.97rem;
+  color: #1f2730;
+}
+.week-card .due strong { color: #B82E38; }
+.week-card .resources {
+  margin-top: 1.2em;
+  padding-top: 1em;
+  border-top: dashed 1px rgba(0,0,0,0.12);
+  font-size: 0.97rem;
+  color: #1f2730;
+}
+.week-card .resources p { margin: 0.4em 0; }
+
+.week-card .no-class {
+  display: inline-block;
+  font-family: 'League Spartan', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #B82E38;
+  background: #FCEBED;
+  padding: 0.4em 0.85em;
+  border-radius: 2px;
+  margin-bottom: 1em;
+  border: solid 1px rgba(230,57,70,0.25);
+}
+.break-marker {
+  text-align: center;
+  font-family: 'League Spartan', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #5e6770;
+  padding: 3rem 0;
+}
+.break-marker::before, .break-marker::after {
+  content: '—';
+  margin: 0 0.8em;
+  color: rgba(0,0,0,0.25);
+}
+.schedule-coda {
+  margin-top: 3.5rem;
+  padding: 2.5rem;
+  text-align: center;
+  background: #fafbfc;
+  border: solid 1px rgba(0,0,0,0.08);
+  border-radius: 4px;
+}
+.schedule-coda h3 {
+  margin-top: 0;
+  font-family: 'League Spartan', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  color: #5e6770;
+}
+.schedule-coda h4 {
+  margin-top: 0.6em;
+  margin-bottom: 0.5em;
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-transform: none;
+  letter-spacing: -0.005em;
+  color: #1a2028;
+}
+.schedule-coda .coda-detail {
+  font-family: 'League Spartan', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #1a2028;
+  margin: 0.4em 0;
+}
+
+/* Assignments page ------------------------------------------------- */
+
+.assignment-block {
+  padding: 3rem 0;
+  border-top: solid 1px rgba(0,0,0,0.08);
+}
+.assignment-block:first-of-type { border-top: 0; padding-top: 0; }
+.assignment-block h2 { margin-top: 0; }
+.assignment-block .meta {
+  font-family: 'League Spartan', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #5e6770;
+  margin: 0 0 1em 0;
+}
+
+details.expandable {
+  margin: 1.7em 0;
+  border: solid 1px rgba(0,0,0,0.12);
+  border-radius: 3px;
+  background: #fafbfc;
+}
+details.expandable summary {
+  padding: 1em 1.3em;
+  cursor: pointer;
+  font-family: 'League Spartan', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  color: #1a2028;
+  list-style: none;
+  position: relative;
+  user-select: none;
+}
+details.expandable summary::-webkit-details-marker { display: none; }
+details.expandable summary::after {
+  content: '+';
+  position: absolute;
+  right: 1.3em;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5em;
+  color: #E63946;
+  font-weight: 300;
+  line-height: 1;
+}
+details.expandable[open] summary::after { content: '–'; }
+details.expandable .details-body {
+  padding: 0 1.5em 1.4em 1.5em;
+  border-top: solid 1px rgba(0,0,0,0.08);
+  padding-top: 1.4em;
+  color: #1f2730;
+}
+
+ul.deliverables {
+  list-style: none;
+  padding-left: 0;
+}
+ul.deliverables li {
+  padding: 0.45em 0 0.45em 1.7em;
+  position: relative;
+  color: #1f2730;
+}
+ul.deliverables li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: #E63946;
+}
+ul.deliverables .points {
+  font-family: 'League Spartan', sans-serif;
+  font-size: 0.85em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #5e6770;
+  margin-left: 0.4em;
+}
+
+.placeholder-link {
+  color: #4a5560;
+  border-bottom: dashed 1px #8c95a0;
+  font-style: italic;
+}
+.placeholder-link::before { content: '↗ '; opacity: 0.55; }
+.placeholder-link:hover { color: #1a2028; border-color: #1a2028; }
+
+/* Gameplay page ---------------------------------------------------- */
+
+.framing-block { padding: 2.5rem 0; }
+
+.games-list {
+  list-style: none;
+  padding: 0;
+  columns: 2;
+  column-gap: 2.5rem;
+  margin: 1.5em 0 2em;
+}
+@media (max-width: 38rem) { .games-list { columns: 1; } }
+.games-list li {
+  break-inside: avoid;
+  padding: 0.5em 0;
+  font-size: 1rem;
+  color: #1f2730;
+}
+.games-list .title {
+  font-style: italic;
+  color: #1a2028;
+  font-weight: 600;
+}
+.games-list .title a {
+  color: inherit;
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.games-list .title a:hover {
+  color: #E63946;
+  border-bottom-color: #E63946;
+}
+.games-list .pub {
+  display: block;
+  font-size: 0.85em;
+  color: #5e6770;
+  margin-top: 0.05em;
+}
+
+.con-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+  padding: 4rem 0 1rem;
+  border-top: solid 2px #1a2028;
+  margin-top: 4rem;
+}
+@media (min-width: 44rem) {
+  .con-section { grid-template-columns: 18rem 1fr; }
+}
+.con-section .con-image {
+  border: solid 1px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  border-radius: 2px;
+  width: 100%;
+}
+.con-section h2 {
+  margin-top: 0;
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+.con-section .con-detail {
+  font-family: 'League Spartan', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #1a2028;
+  margin: 0 0 1em 0;
+}
+.con-section .con-invite {
+  font-style: italic;
+  color: #1f2730;
+  margin-top: 1em;
+}
+
+/* Footer ----------------------------------------------------------- */
+
+.site-footer {
+  background: #1a2028;
+  color: rgba(255,255,255,0.78);
+  padding: 3.5rem 0 2.5rem;
+  margin-top: 0;
+}
+.site-footer .inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  gap: 2rem;
+}
+.site-footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.site-footer .links { display: flex; flex-wrap: wrap; gap: 1.4rem; }
+.site-footer .links a {
+  color: rgba(255,255,255,0.92);
+  border: 0;
+  font-family: 'League Spartan', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.site-footer .links a:hover { color: #F58A93; }
+.site-footer .meta { font-size: 0.85rem; }
+.site-footer .meta li { margin-bottom: 0.3em; }
+.site-footer .meta a {
+  color: rgba(255,255,255,0.92);
+  border-bottom: dotted 1px rgba(255,255,255,0.45);
+}
+
+/* Mobile fine-tuning ---------------------------------------------- */
+
+@media (max-width: 38rem) {
+  .cinematic-hero { min-height: 70vh; }
+  .cinematic-hero h1 { font-size: 2.6rem; }
+  .cinematic-hero .tagline { font-size: 1.1rem; }
+  .cinematic-hero .meeting-info { font-size: 0.78rem; letter-spacing: 0.14em; }
+  .cinematic-hero .meeting-info .sep { display: none; }
+  .cinematic-hero .meeting-info span {
+    display: block;
+    margin: 0.3em 0;
+  }
+  .page-hero { height: 20rem; }
+  .page-hero h1 { font-size: 2.1rem; }
+  .inner { padding: 0 1.5rem; }
+  .site-header { padding: 0 1.5rem; }
+  .menu-toggle span:not(.menu-icon) { display: none; }
+  .week-card { padding: 2.5rem 0; }
+}
