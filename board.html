@@ -1,0 +1,549 @@
+---
+layout: default
+title: Game Board Dielines
+description: Laser cut layouts, print templates, and assembly steps for wrapped, mounted, and flat game boards.
+---
+
+<section class="page-hero" style="background-image: url('{{ '/assets/images/hero/fabrication.png' | relative_url }}');">
+  <div class="hero-content">
+    <h1>Game Board Dielines</h1>
+    <p class="tagline">Laser cut files and print templates for your prototype board</p>
+  </div>
+</section>
+
+<section class="page-body kit">
+<div class="kit-wrap">
+  <p class="intro">Pick a board format and size. The page lays out the chipboard for cutting, draws the print template for your art, and checks that the folded board fits in a class box. Building the box too? Use the <a href="box.html">Game Box Dielines</a> kit.</p>
+  <div class="main">
+    <form class="rail" id="form" onsubmit="return false">
+      <fieldset>
+        <legend>Class sizes</legend>
+        <div class="presets">
+          <button type="button" class="pre" data-fmt="bifold" data-w="22" data-h="11" aria-pressed="true">Wrapped bifold · 22 × 11</button>
+          <button type="button" class="pre" data-fmt="quad" data-w="22" data-h="22" aria-pressed="false">Wrapped quad · 22 × 22</button>
+          <button type="button" class="pre" data-fmt="mount4" data-w="22" data-h="22" aria-pressed="false">Mounted 4-panel · 22 × 22</button>
+          <button type="button" class="pre" data-fmt="mount6" data-w="33" data-h="22" aria-pressed="false">Mounted 6-panel · 33 × 22</button>
+          <button type="button" class="pre" data-fmt="quad" data-w="22" data-h="10.5" data-box="half" aria-pressed="false">Half-box quad · 22 × 10.5</button>
+          <button type="button" class="pre" data-fmt="flush" data-w="11" data-h="8.5" data-n="4" aria-pressed="false">Player boards · 11 × 8.5</button>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Board</legend>
+        <div class="row"><label for="fmt">Format</label>
+          <select id="fmt">
+            <optgroup label="Wrapped (print wraps the edges)">
+              <option value="bifold">Bifold, 2 panels</option>
+              <option value="quad">Quad-fold, 4 panels</option>
+              <option value="single">Single panel</option>
+            </optgroup>
+            <optgroup label="Mounted and sliced (flush edges)">
+              <option value="mount4">4 panels, 2 × 2</option>
+              <option value="mount6">6 panels, 3 × 2</option>
+            </optgroup>
+            <optgroup label="Flat">
+              <option value="flush">Player boards, flush-trimmed</option>
+            </optgroup>
+          </select></div>
+        <div class="row"><label for="bw">Width<small>flat, open board</small></label><input id="bw" type="number" step="0.25" min="2" value="22"></div>
+        <div class="row"><label for="bh">Height<small>flat, open board</small></label><input id="bh" type="number" step="0.25" min="2" value="11"></div>
+        <div class="row" id="nrow" hidden><label for="n">How many<small>player boards, tiles</small></label><input id="n" type="number" step="1" min="1" max="12" value="4"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Material</legend>
+        <div class="row"><label for="t">Board thickness<small>60 pt chipboard = 0.060</small></label><input id="t" type="number" step="0.005" min="0.01" value="0.060"></div>
+        <div class="row"><label for="ply">Layers<small>2 = stiffer, twice as thick</small></label><select id="ply"><option value="1">1</option><option value="2">2</option></select></div>
+        <div class="row" id="tirow"><label for="ti">Turn-in<small>art that wraps to the back</small></label><input id="ti" type="number" step="0.05" min="0.25" value="0.5"></div>
+        <div class="row" id="pmrow" hidden><label for="pm">Print the board as<small>large format, or a sheet per panel</small></label><select id="pm"><option value="large">One large-format print</option><option value="panel">One 12 × 18 sheet per panel</option></select></div>
+        <div class="row"><label for="sheet">Laser sheet<small>half sheets fit every laser</small></label><select id="sheet"><option value="24x36">24 × 36 full sheet</option><option value="18x24">18 × 24 half sheet</option></select></div>
+        <div class="row"><label for="box">Stores in</label><select id="box"><option value="full">Full box (11.5 × 11.5)</option><option value="half">Half box (11.5 × 5.75)</option></select></div>
+        <div class="row"><label for="roll">Print roll width</label><select id="roll"><option value="24">24 in</option><option value="36">36 in</option><option value="44">44 in</option></select></div>
+      </fieldset>
+    </form>
+
+    <section class="stage" aria-label="Preview">
+      <div class="tabs" role="tablist">
+        <button type="button" id="tab-cut" aria-pressed="true" data-view="cut">Cut sheet</button>
+        <button type="button" id="tab-print" aria-pressed="false" data-view="print">Board print</button>
+      </div>
+      <div class="tabs" id="sheetpick" hidden></div>
+      <div class="canvas" id="canvas"></div>
+      <div class="legend" id="legend"></div>
+      <p class="warn" id="cutwarn">Send this file to the laser as you saved it. The Universal lasers read only pure red (#FF0000) as a cut, at 0.001″. Recoloring, moving or rescaling a line, or switching an Illustrator file to CMYK, can make the laser skip it. A 0.001″ line looks faint or invisible in a browser; that's correct. To check it, zoom in to 400% or more, or use View › Outline in Illustrator.</p>
+      <div class="actions">
+        <button type="button" id="dl">Download this SVG</button>
+        <button type="button" id="dlall">Download all files</button>
+        <button type="button" id="copy">Copy SVG code</button>
+        <span class="status" id="status" role="status"></span>
+      </div>
+    </section>
+  </div>
+
+  <div class="specs">
+    <div class="card">
+      <h2>Dimensions</h2>
+      <table id="dims"></table>
+      <p class="note" id="gapnote"></p>
+    </div>
+    <div class="card">
+      <h2>Will it fit?</h2>
+      <div class="chips" id="fits"></div>
+    </div>
+    <div class="card">
+      <h2>How the folds work</h2>
+      <p class="why" id="why"></p>
+    </div>
+  </div>
+
+  <section class="card art" id="board-art" aria-labelledby="art-h">
+    <h2 id="art-h">Board art</h2>
+    <p class="lede">Set up and export the board art the same way as the box wraps. The full walkthrough is in the <a href="box.html#box-art">Box art</a> section of the box kit. The steps below cover what's different about boards.</p>
+    <p class="note" id="artsizes"></p>
+    <div class="steps">
+      <div class="step"><h3><span>1</span>Save the template</h3>
+        <p>Open the <b>Board print</b> tab and save the SVG. Open it in Illustrator, lock the template, and work on an <b>Art</b> layer underneath.</p></div>
+      <div class="step"><h3><span>2</span>Paint past every edge</h3>
+        <p id="edgetip"></p></div>
+      <div class="step"><h3><span>3</span>Respect the seams</h3>
+        <p id="guttertip"></p></div>
+      <div class="step"><h3><span>4</span>Think about where players sit</h3>
+        <p>A board is read from every side of the table. Turn labels toward the player who uses them, or keep them symmetrical. Put the title on the edge nearest whoever sets up.</p></div>
+      <div class="step"><h3><span>5</span>Export and check</h3>
+        <p id="exporttip"></p></div>
+      <div class="step"><h3><span>6</span>Send it to Dr. Gotzler</h3>
+        <p>Email the PDF to <b class="sel">sgotzler@unc.edu</b>, named <code id="fname">teamname_board.pdf</code>. It's printed at 100% on matte paper with the box wraps.</p></div>
+    </div>
+  </section>
+
+  <section class="card art" id="assembly" aria-labelledby="as-h">
+    <h2 id="as-h">Assembly</h2>
+    <p class="warn">Spraying isn't allowed at BeAM. Do every spray-adhesive and spray-finish step outdoors or in a well-ventilated room, over scrap cardboard.</p>
+    <div class="steps" id="build"></div>
+  </section>
+</div>
+</section>
+
+<style>
+.kit{
+  --bg:#ffffff; --panel:#fafbfc; --ink:#1f2730; --head:#1a2028; --muted:#5e6770; --line:#dde1e5;
+  --accent:#E63946; --accent-dk:#B82E38; --accent-bg:#FCEBED;
+  --board:#c9bfa9; --cut:#E63946; --score:#2f5bd3; --bleed:#28a8b8; --ok:#2f7a3c; --warn:#B82E38;
+  --display:'League Spartan','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --body:'Source Sans 3','Source Sans Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'League Spartan','Helvetica Neue',Helvetica,Arial,sans-serif;
+  color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+}
+.kit .main{display:grid;grid-template-columns:320px minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:860px){.kit .main{grid-template-columns:minmax(0,1fr)}}
+.kit .rail{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px;display:grid;gap:18px}
+.kit fieldset{border:0;margin:0;padding:0;display:grid;gap:10px}
+.kit legend{font:600 13px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;font-size:15px}
+.kit .presets{display:flex;gap:8px;flex-wrap:wrap}
+.kit button{font:500 14px var(--body);color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:4px;padding:8px 12px;cursor:pointer}
+.kit button:hover{border-color:var(--ink)}
+.kit button:focus-visible,.kit input:focus-visible,.kit select:focus-visible{outline:2px solid var(--score);outline-offset:2px}
+.kit button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.kit .row{display:grid;grid-template-columns:1fr 104px;gap:10px;align-items:center}
+.kit label{font-size:14px}
+.kit label small{display:block;color:var(--muted);font-size:12px;line-height:1.35}
+.kit input,.kit select{font:500 14px var(--mono);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:7px 8px;width:100%;font-variant-numeric:tabular-nums}
+.kit .stage{display:grid;gap:12px;min-width:0}
+.kit .tabs{display:flex;gap:6px;flex-wrap:wrap}
+.kit .canvas{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;overflow-x:auto}
+.kit .canvas svg{display:block;width:100%;height:auto;max-height:70vh}
+.kit .canvas svg .cut{stroke:var(--cut)!important;vector-effect:non-scaling-stroke;stroke-width:1.4px!important}
+.kit .canvas svg .score{stroke:var(--score)!important;vector-effect:non-scaling-stroke;stroke-width:1.2px!important;stroke-dasharray:5 3}
+.kit .canvas svg .fold{stroke:var(--score)!important;vector-effect:non-scaling-stroke;stroke-width:1px!important;stroke-dasharray:5 3}
+.kit .canvas svg .trim{stroke:var(--ink)!important;vector-effect:non-scaling-stroke;stroke-width:1.2px!important}
+.kit .canvas svg .bleedzone{stroke:var(--bleed)!important;stroke-opacity:.45!important}
+.kit .canvas svg .artarea{fill:var(--panel)!important}
+.kit .canvas svg .sheet{fill:var(--board)!important;opacity:.35;stroke:var(--muted)!important;vector-effect:non-scaling-stroke;stroke-width:1px!important}
+.kit .canvas svg text{fill:var(--muted)!important}
+.kit .legend{display:flex;gap:16px;flex-wrap:wrap;font:12px var(--mono);color:var(--muted)}
+.kit .legend span::before{content:"";display:inline-block;width:18px;height:0;border-top:2px solid currentColor;vertical-align:middle;margin-right:6px}
+.kit .legend .l-cut{color:var(--cut)}
+.kit .legend .l-score{color:var(--score)}
+.kit .legend .l-bleed{color:var(--bleed)}
+.kit .legend .l-trim{color:var(--ink)}
+.kit .legend .l-score::before{border-top-style:dashed}
+.kit .legend .l-bleed::before{height:8px;border-top:0;background:currentColor;opacity:.45}
+.kit .actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.kit .status{font-size:13px;color:var(--muted)}
+.kit .specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.kit .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px;min-width:0}
+.kit h2{font:600 22px/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase;margin:0 0 12px}
+.kit table{width:100%;border-collapse:collapse;font:13px var(--mono);font-variant-numeric:tabular-nums}
+.kit th{text-align:left;font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--line)}
+.kit td{padding:7px 0;border-bottom:1px solid var(--line)}
+.kit td:not(:first-child),.kit th:not(:first-child){text-align:right}
+.kit .chips{display:grid;gap:8px;margin-top:4px}
+.kit .chips h3{font:500 11px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 0}
+.kit .chips h3:first-child{margin-top:0}
+.kit .chip{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:8px 10px;border-radius:4px;border:1px solid var(--line)}
+.kit .chip b{font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.kit .chip.ok b{color:var(--ok)}
+.kit .chip.no b{color:var(--warn)}
+.kit ol{margin:0;padding-left:20px;display:grid;gap:8px;max-width:68ch}
+.kit .note{font-size:13px;color:var(--muted);margin:10px 0 0}
+.kit pre{white-space:pre-wrap;word-break:break-all;font:11px var(--mono);max-height:180px;overflow:auto;background:var(--bg);padding:8px;border-radius:4px}
+.kit .legend a{color:var(--score);font:12px var(--mono)}
+.kit .art{display:grid;gap:14px}
+.kit .art h2{margin:0}
+.kit .lede{margin:0;max-width:72ch}
+.kit .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.kit .step{border-top:2px solid var(--ink);padding-top:10px;min-width:0}
+.kit .step h3{font:600 18px/1.15 var(--display);letter-spacing:.04em;text-transform:uppercase;margin:0 0 6px;display:flex;gap:10px;align-items:baseline}
+.kit .step h3 span{font:500 12px var(--mono);color:var(--cut)}
+.kit .step p,.kit .step ul{margin:0 0 8px;font-size:14px}
+.kit .step ul{padding-left:18px}
+.kit .sel{user-select:all;font-family:var(--mono);font-weight:500}
+.kit code{font:12px var(--mono);background:var(--bg);padding:1px 4px;border-radius:3px;word-break:break-all}
+.kit details{border-top:1px solid var(--line);padding-top:10px}
+.kit summary{cursor:pointer;font-weight:600}
+.kit details p{max-width:72ch;font-size:14px}
+.kit .canvas svg .slit{stroke:var(--cut)!important;vector-effect:non-scaling-stroke;stroke-width:1.6px!important;stroke-dasharray:2 3}
+.kit .canvas svg .edge{stroke:var(--muted)!important;vector-effect:non-scaling-stroke;stroke-width:1px!important;stroke-dasharray:3 3}
+.kit .canvas svg .seam{stroke:var(--cut)!important;vector-effect:non-scaling-stroke;stroke-width:1.3px!important}
+.kit .canvas svg .strip{fill:var(--cut)!important;opacity:.18}
+.kit .legend .l-slit{color:var(--cut)}
+.kit .legend .l-slit::before{border-top-style:dotted;border-top-width:3px}
+.kit .legend .l-edge{color:var(--muted)}
+.kit .legend .l-edge::before{border-top-style:dashed}
+.kit .legend .l-seam{color:var(--cut)}
+.kit .canvas svg .crops rect{stroke:var(--bleed)!important;vector-effect:non-scaling-stroke;stroke-width:1.2px!important;stroke-dasharray:6 3}
+.kit .legend .l-crop{color:var(--bleed)}
+.kit .legend .l-crop::before{border-top-style:dashed}
+.kit header a,.kit .lede a{color:var(--score)}
+.kit .warn{font-size:13px;line-height:1.45;margin:0;padding:8px 10px;border-left:3px solid var(--warn);background:var(--bg);color:var(--ink);max-width:72ch}
+.kit .pick-label{font-size:13px;color:var(--muted);align-self:center;margin-right:4px}
+.kit .why{font-size:13px;color:var(--muted);margin:0}
+.kit optgroup{font-style:normal;font-weight:600}
+.kit *,.kit *::before,.kit *::after{box-sizing:border-box}
+.kit [hidden]{display:none!important}
+.kit .main{grid-template-columns:22rem minmax(0,1fr)}
+@media (max-width:860px){.kit .main{grid-template-columns:minmax(0,1fr)}}
+.kit .row{grid-template-columns:minmax(0,1fr) 10.5rem}
+.kit.page-body{padding:4rem 0 5rem}
+.kit .kit-wrap{max-width:74rem;margin:0 auto;padding:0 2rem;display:grid;gap:2rem}
+@media (max-width:38rem){.kit .kit-wrap{padding:0 1.5rem}}
+.kit .intro{margin:0;max-width:44rem;font-size:1.0625rem}
+.kit h2{font:800 1.45rem/1.15 var(--display);color:var(--head);letter-spacing:-.005em;text-transform:none;margin:0 0 .8rem}
+.kit h3{color:var(--head)}
+.kit legend{font:700 .78rem/1 var(--display);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.kit .rail,.kit .card,.kit .canvas{border-radius:3px}
+.kit button{font:700 .78rem/1 var(--display);letter-spacing:.12em;text-transform:uppercase;padding:.75em 1em;border-radius:2px;color:var(--head)}
+.kit button:hover{border-color:var(--accent);color:var(--accent)}
+.kit button[aria-pressed="true"]{background:var(--head);border-color:var(--head);color:#fff}
+.kit .presets button{text-transform:none;letter-spacing:.02em;font-weight:600;font-size:.85rem}
+.kit #dl,.kit #dlall{background:var(--accent);border-color:var(--accent);color:#fff}
+.kit #dl:hover,.kit #dlall:hover{background:var(--accent-dk);border-color:var(--accent-dk);color:#fff}
+.kit input,.kit select{font:500 .95rem var(--body);background:#fff}
+.kit table,.kit td{font-family:var(--body);font-size:.9rem}
+.kit th{font:700 .7rem var(--display);letter-spacing:.14em}
+.kit .chips h3,.kit .legend{font-family:var(--display);font-weight:700;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase}
+.kit .chip b{font:700 .72rem var(--display);letter-spacing:.12em}
+.kit code,.kit .sel,.kit pre{font-family:ui-monospace,Menlo,Consolas,monospace}
+.kit .warn{background:var(--accent-bg);border-left:3px solid var(--accent);color:var(--ink);font-size:.92rem;padding:.6em .9em}
+.kit .step{border-top:2px solid var(--head)}
+.kit .step h3{font:700 1.05rem/1.2 var(--display);letter-spacing:.01em;text-transform:none}
+.kit .step h3 span{font:800 .85rem var(--display);color:var(--accent)}
+.kit .step p,.kit .step ul{font-size:.95rem}
+.kit .lede{font-size:1rem}
+.kit .note{font-size:.88rem}
+.kit a{color:var(--accent)}
+.kit .legend a{color:var(--accent);font-family:var(--display)}
+.kit ol li{margin-bottom:0}
+
+</style>
+
+{% raw %}
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const f=n=>(+n).toFixed(3).replace(/\.?0+$/,'')||'0';
+  const mm=n=>Math.round(n*25.4);
+  const HAIR=0.001, P='0.0035', NARROW=0.05;
+  let view='cut', last={}, sheetIdx=0, cutFiles=[];
+  const allFiles=()=>[...cutFiles,last.print];
+  // class box interiors, from the box kit defaults (0.060 board, 0.040 clearance, 0.006 wrap)
+  const BOX={full:{w:11.168,d:11.168,h:2.85},half:{w:11.168,d:5.418,h:2.85}};
+
+  function model(){
+    const fmt=$('fmt').value, BW=+$('bw').value, BH=+$('bh').value, t=+$('t').value, ply=+$('ply').value;
+    const tt=t*ply+0.008; // board plus paper
+    const mounted=fmt==='mount4'||fmt==='mount6', wrapped=['bifold','quad','single'].includes(fmt);
+    let cg=[],rg=[];
+    // seam gaps: an art-in fold needs a gap at least as wide as the board it wraps around
+    if(fmt==='bifold'){cg=[2*tt+0.02]}
+    if(fmt==='quad'){cg=[2*tt+0.02];rg=[4*tt+0.02]}
+    if(fmt==='mount4'){cg=[0.03];rg=[2*tt+0.02]}
+    if(fmt==='mount6'){cg=[0.03,tt+0.02];rg=[4*tt+0.02]}
+    const cols=cg.length+1, rows=rg.length+1;
+    const pw=(BW-cg.reduce((a,b)=>a+b,0))/cols, ph=(BH-rg.reduce((a,b)=>a+b,0))/rows;
+    const T=wrapped?+$('ti').value:0;
+    const n=fmt==='flush'?Math.max(1,Math.round(+$('n').value)):1;
+    const perPanel=mounted&&$('pm').value==='panel';
+    const [sheetS,sheetL]=$('sheet').value.split('x').map(Number);
+    return {fmt,mounted,wrapped,perPanel,sheetS,sheetL,half:sheetS===18,BW,BH,t,ply,tt,cg,rg,cols,rows,pw,ph,T,n,layers:cols*rows,box:BOX[$('box').value],roll:+$('roll').value};
+  }
+  const xs=m=>{const a=[0];m.cg.forEach((g,i)=>a.push(a[i]+m.pw+g));return a};
+  const ys=m=>{const a=[0];m.rg.forEach((g,i)=>a.push(a[i]+m.ph+g));return a};
+  function panels(m){const a=[];ys(m).forEach(y=>xs(m).forEach(x=>a.push([x,y])));return a}
+  const rect=(x,y,w,h)=>`M${f(x)} ${f(y)} h${f(w)} v${f(h)} h${f(-w)} Z`;
+  const uniq=a=>[...new Set(a.map(g=>+g.toFixed(4)))];
+
+  // ---- cut layouts: parts shelf-packed onto as many sheets of the chosen size as they need
+  function packParts(m){
+    const S=m.sheetS,L=m.sheetL,mg=0.25,sp=0.25;
+    let parts=[];
+    if(m.fmt==='flush'){for(let i=0;i<m.n;i++)parts.push({w:m.BW+0.5,h:m.BH+0.5,label:`blank ${i+1}`})}
+    else if(m.perPanel){const k=m.layers*m.ply;for(let i=0;i<k;i++)parts.push({w:m.pw+0.5,h:m.ph+0.5,label:m.ply>1?`blank ${Math.floor(i/2)+1}${i%2?'b':'a'}`:`blank ${i+1}`})}
+    else if(m.mounted){parts.push({w:m.BW+1,h:m.BH+1,label:'mounting blank'});if(m.ply>1)parts.push({w:m.BW+1,h:m.BH+1,label:'second layer'})}
+    else{const k=m.layers*m.ply;for(let i=0;i<k;i++)parts.push({w:m.pw,h:m.ph,label:m.ply>1?`panel ${Math.floor(i/2)+1}${i%2?'b':'a'}`:`panel ${i+1}`})}
+    const spacers=uniq(m.cg.concat(m.rg)).filter(g=>g>=NARROW).map(g=>({w:g,h:Math.min(8,S-2*mg),label:'spacer'}));
+    const sheets=[], offcut=[]; let cur,x,y,rowH,tooBig=false;
+    const start=()=>{cur=[];sheets.push(cur);x=mg;y=mg;rowH=0};
+    start();
+    for(const p0 of parts.concat(spacers)){
+      const p={...p0}, isSp=p.label==='spacer';
+      if(!isSp){
+        const up=p.w<=L-2*mg&&p.h<=S-2*mg, rot=p.h<=L-2*mg&&p.w<=S-2*mg;
+        if(!up&&rot){[p.w,p.h]=[p.h,p.w]}
+        if(!up&&!rot)tooBig=true;
+      }
+      const w=isSp?p.w+0.6:p.w;
+      let nx=x,ny=y,nh=rowH;
+      if(nx+w>L-mg){nx=mg;ny+=rowH+sp;nh=0}
+      if(ny+p.h>S-mg&&cur.length){
+        if(isSp){offcut.push(p.w);continue} // never start a sheet just for a spacer
+        start();nx=x;ny=y;nh=0;
+      }
+      x=nx;y=ny;rowH=nh;
+      cur.push({...p,x,y}); x+=w+sp; rowH=Math.max(rowH,p.h);
+    }
+    return {sheets,tooBig,offcut,count:parts.length};
+  }
+  function cutSVG(m,pack,idx,preview){
+    const S=m.sheetS,L=m.sheetL,mg=0.25;
+    const placed=pack.sheets[idx];
+    const W=Math.max(L,...placed.map(p=>p.x+p.w+mg)), H=Math.max(S,...placed.map(p=>p.y+p.h+mg));
+    const lab=p=>!preview?'':p.label==='spacer'
+      ?`<text x="${f(p.x+p.w+0.15)}" y="${f(p.y+p.h/2)}" font-family="IBM Plex Mono,monospace" font-size="0.4" transform="rotate(-90 ${f(p.x+p.w+0.15)} ${f(p.y+p.h/2)})" text-anchor="middle" dominant-baseline="hanging">gap spacer ${f(p.w)}″</text>`
+      :`<text x="${f(p.x+p.w/2)}" y="${f(p.y+p.h/2+0.15)}" font-family="IBM Plex Mono,monospace" font-size="0.45" text-anchor="middle">${p.label}</text>`;
+    const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${f(W)}in" height="${f(H)}in" viewBox="0 0 ${f(W)} ${f(H)}">`+
+      (preview?`<rect class="sheet" x="0" y="0" width="${L}" height="${S}" fill="#c9bfa9" stroke="#777" stroke-width="${HAIR}"/>`:'')+
+      `<g fill="none">`+placed.map(p=>`<path class="cut" d="${rect(p.x,p.y,p.w,p.h)}" stroke="#FF0000" stroke-width="${HAIR}"/>`).join('')+`</g>`+
+      placed.map(lab).join('')+(preview?`<text x="${f(L/2)}" y="${f(S-0.2)}" font-family="IBM Plex Mono,monospace" font-size="0.4" text-anchor="middle">${S} × ${L} sheet${pack.sheets.length>1?` · ${idx+1} of ${pack.sheets.length}`:''}</text>`:'')+`</svg>`;
+    return svg;
+  }
+
+  // ---- print template
+  function printSVG(m,preview){
+    const B=0.125,pad=B+0.05,T=m.T;
+    const lab=(x,y,s,sz=0.35)=>`<text x="${f(x)}" y="${f(y)}" font-family="IBM Plex Mono,monospace" font-size="${sz}" text-anchor="middle" fill="#777">${s}</text>`;
+    const bleedAndFill=d=>`<path class="bleedzone" d="${d}" stroke="#00B4D8" stroke-opacity="0.35" stroke-width="${B*2}" stroke-linejoin="miter"/>`+(preview?`<path class="artarea" d="${d}" fill="#FFFFFF" stroke="none"/>`:'');
+    if(m.fmt==='flush'){
+      const cw=m.BW+2*B+0.25, rh=m.BH+2*B+0.25;
+      const cols=Math.min(m.n,Math.max(1,Math.floor((m.roll-0.5+0.25)/cw))), rows=Math.ceil(m.n/cols);
+      const W=cols*cw-0.25+0.1, H=rows*rh-0.25+0.1;
+      let g='',trim='',labels='';
+      for(let i=0;i<m.n;i++){const x=0.05+B+(i%cols)*cw,y=0.05+B+Math.floor(i/cols)*rh,d=rect(x,y,m.BW,m.BH);
+        g+=bleedAndFill(d); trim+=d+' '; labels+=lab(x+m.BW/2,y+m.BH/2,`player board ${i+1}`);}
+      const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${f(W)}in" height="${f(H)}in" viewBox="0 0 ${f(W)} ${f(H)}">`+
+        `<g id="GUIDES_delete-before-printing" fill="none">${g}${labels}</g>`+
+        `<g id="PRINT_trim-line" fill="none"><path class="trim" d="${trim}" stroke="#555555" stroke-width="${P}"/></g></svg>`;
+      return {svg,w:W,h:H};
+    }
+    const BW=m.BW,BH=m.BH, ox=pad+T, oy=pad+T, W=BW+2*T+2*pad, H=BH+2*T+2*pad;
+    let trim, guides='', print='';
+    if(m.mounted){
+      trim=rect(ox,oy,BW,BH);
+      // seams: narrow gaps are one slice; wide gaps are two slices with a strip removed
+      let seam='',strips='';
+      const X=xs(m),Y=ys(m);
+      m.cg.forEach((g,i)=>{const x=ox+X[i]+m.pw;
+        if(g<NARROW)seam+=`M${f(x+g/2)} ${f(oy)} V${f(oy+BH)} `;
+        else{seam+=`M${f(x)} ${f(oy)} V${f(oy+BH)} M${f(x+g)} ${f(oy)} V${f(oy+BH)} `;strips+=rect(x,oy,g,BH)}});
+      m.rg.forEach((g,i)=>{const y=oy+Y[i]+m.ph;
+        if(g<NARROW)seam+=`M${f(ox)} ${f(y+g/2)} H${f(ox+BW)} `;
+        else{seam+=`M${f(ox)} ${f(y)} H${f(ox+BW)} M${f(ox)} ${f(y+g)} H${f(ox+BW)} `;strips+=rect(ox,y,BW,g)}});
+      const nums=panels(m).map(([x,y],i)=>lab(ox+x+m.pw/2,oy+y+m.ph/2,String(i+1),0.9)).join('');
+      guides=(strips?`<path class="strip" d="${strips}" fill="#FF0000" fill-opacity="0.15"/>`:'')+nums+lab(W/2,oy+0.6,'TOP EDGE',0.3);
+      print=`<g id="PRINT_cut-lines" fill="none"><path class="seam" d="${seam}" stroke="#888888" stroke-width="${P}"/></g>`;
+      if(m.perPanel){
+        const crops=panels(m).map(([x,y])=>`<rect x="${f(ox+x-B)}" y="${f(oy+y-B)}" width="${f(m.pw+2*B)}" height="${f(m.ph+2*B)}"/>`).join('');
+        guides+=`</g><g id="ARTBOARDS_one-per-panel" fill="none" stroke="#00B4D8" stroke-width="${P}" stroke-dasharray="0.15 0.08" class="crops">${crops}</g><g fill="none">`;
+      }
+    }else{
+      // wrapped: mitered outline, 45° corner cuts passing 1.5 board-thicknesses off each board corner
+      const c=Math.min(Math.max(0,2*T-1.5*m.tt*Math.SQRT2),T*1.9), X0=pad,Y0=pad,X1=pad+BW+2*T,Y1=pad+BH+2*T;
+      const pts=[[X0+c,Y0],[X1-c,Y0],[X1,Y0+c],[X1,Y1-c],[X1-c,Y1],[X0+c,Y1],[X0,Y1-c],[X0,Y0+c]];
+      trim='M'+pts.map(([x,y])=>f(x)+' '+f(y)).join(' L')+' Z';
+      const edges=panels(m).map(([x,y])=>rect(ox+x,oy+y,m.pw,m.ph)).join(' ');
+      let fold='',slit='';
+      if(m.cols>1){const x=ox+m.pw+m.cg[0]/2;fold+=`M${f(x)} ${f(oy)} V${f(oy+BH)} `}
+      if(m.rows>1){const y=oy+m.ph+m.rg[0]/2;fold+=`M${f(ox)} ${f(y)} H${f(ox+BW)} `;slit=`M${f(ox+m.pw+m.cg[0]/2)} ${f(y)} H${f(ox+BW)}`}
+      guides=`<path class="edge" d="${edges}" stroke="#999999" stroke-width="${P}" stroke-dasharray="0.06 0.06"/>`+lab(W/2,oy+0.6,'TOP EDGE',0.3)+
+        (slit?lab(ox+BW*0.75,oy+m.ph+m.rg[0]/2-0.15,'slit after gluing',0.25):'');
+      print=(fold?`<g id="PRINT_fold-lines" fill="none"><path class="fold" d="${fold}" stroke="#BBBBBB" stroke-width="${P}" stroke-dasharray="0.06 0.06"/></g>`:'')+
+        (slit?`<g id="PRINT_slit-line" fill="none"><path class="slit" d="${slit}" stroke="#999999" stroke-width="${P}" stroke-dasharray="0.02 0.04"/></g>`:'');
+    }
+    const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${f(W)}in" height="${f(H)}in" viewBox="0 0 ${f(W)} ${f(H)}">`+
+      `<g id="GUIDES_delete-before-printing" fill="none">${bleedAndFill(trim)}${guides}</g>`+print+
+      `<g id="PRINT_trim-line" fill="none"><path class="trim" d="${trim}" stroke="#555555" stroke-width="${P}"/></g></svg>`;
+    return {svg,w:W,h:H};
+  }
+
+  const step=(n,title,body)=>`<div class="step"><h3><span>${n}</span>${title}</h3>${body}</div>`;
+  const steps=list=>list.map((s,i)=>step(i+1,s[0],`<p>${s[1]}</p>`)).join('');
+
+  function render(){
+    const m=model();
+    $('nrow').hidden=m.fmt!=='flush'; $('tirow').hidden=!m.wrapped; $('pmrow').hidden=!m.mounted;
+    const pack=packParts(m), nS=pack.sheets.length;
+    if(sheetIdx>=nS)sheetIdx=0;
+    const c={svg:cutSVG(m,pack,sheetIdx,true),ok:!pack.tooBig,count:pack.count}, cxSvg=cutSVG(m,pack,sheetIdx,false);
+    const p=printSVG(m,true), px=printSVG(m,false);
+    const cutName=i=>`${m.fmt==='flush'?'playerboards':'board'}-cut-${f(m.BW)}x${f(m.BH)}-${m.sheetS}x${m.sheetL}${nS>1?`-${i+1}of${nS}`:''}.svg`;
+    cutFiles=pack.sheets.map((_,i)=>({svg:cutSVG(m,pack,i,false),name:cutName(i)}));
+    const tag=m.fmt==='flush'?'playerboards':'board';
+    last={cut:{svg:cxSvg,name:`${tag}-cut-${f(m.BW)}x${f(m.BH)}-${m.sheetS}x${m.sheetL}${nS>1?`-${sheetIdx+1}of${nS}`:''}.svg`},print:{svg:px.svg,name:`${tag}-print-${f(m.BW)}x${f(m.BH)}.svg`}};
+    $('canvas').innerHTML=view==='cut'?c.svg:p.svg;
+    $('cutwarn').hidden=view!=='cut';
+    const pick=$('sheetpick');
+    pick.hidden=view!=='cut'||nS<2;
+    pick.innerHTML=nS<2?'':`<span class="pick-label">${nS} layouts. Save each one.</span>`+pack.sheets.map((_,i)=>`<button type="button" data-i="${i}" aria-pressed="${i===sheetIdx}">Layout ${i+1}</button>`).join('');
+    pick.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{sheetIdx=+b.dataset.i;render()}));
+    $('legend').innerHTML=view==='cut'?'<span class="l-cut">cut · red hairline</span>'
+      :'<span class="l-trim">trim line</span>'+
+       (m.mounted?'<span class="l-seam">seam cut · shaded strips come out</span>':'')+
+       (m.perPanel?'<span class="l-crop">one print per panel</span>':'')+
+       (m.wrapped&&m.fmt!=='single'?'<span class="l-edge">panel edges</span><span class="l-score">fold</span>':'')+(m.fmt==='single'?'<span class="l-edge">panel edges</span>':'')+
+       (m.fmt==='quad'?'<span class="l-slit">slit after gluing</span>':'')+
+       '<span class="l-bleed">bleed · extend art ⅛″ past trim</span><a href="#board-art">How to design and print this</a>';
+    $('fname').textContent=`teamname_${tag}.pdf`;
+
+    const folded=m.fmt==='flush'?{w:m.BW,h:m.BH,th:m.tt*m.n}:{w:m.pw+(m.wrapped?0.03:0),h:m.ph+(m.wrapped?0.03:0),th:m.layers*(m.tt+0.004)};
+    const row=(k,a,b)=>`<tr><td>${k}</td><td>${a}</td><td>${b}</td></tr>`;
+    let d='<tr><th>Part</th><th>Inches</th><th>mm</th></tr>'+row(m.fmt==='flush'?'Each board':'Open board',`${f(m.BW)} × ${f(m.BH)}`,`${mm(m.BW)} × ${mm(m.BH)}`);
+    if(m.fmt!=='flush'){
+      d+=row(m.layers>1?`Panel (× ${m.layers})`:'Panel',`${f(m.pw)} × ${f(m.ph)}`,`${mm(m.pw)} × ${mm(m.ph)}`);
+      m.cg.forEach((g,i)=>d+=row(m.cg.length>1?`Seam gap, columns ${i+1}–${i+2}`:'Seam gap, vertical',f(g),(g*25.4).toFixed(1)));
+      m.rg.forEach(g=>d+=row('Seam gap, horizontal',f(g),(g*25.4).toFixed(1)));
+      if(m.layers>1)d+=row('Folded',`${f(folded.w)} × ${f(folded.h)} × ${f(folded.th)}`,`${mm(folded.w)} × ${mm(folded.h)} × ${(folded.th*25.4).toFixed(1)}`);
+      d+=row('Backing paper',m.mounted?`${f(m.BW+1)} × ${f(m.BH+1)}`:`${f(m.BW-0.25)} × ${f(m.BH-0.25)}`,m.mounted?`${mm(m.BW+1)} × ${mm(m.BH+1)}`:`${mm(m.BW-0.25)} × ${mm(m.BH-0.25)}`);
+    }
+    const ppw=m.pw+0.25, pph=m.ph+0.25;
+    d+=m.perPanel?row(`Panel print (× ${m.layers})`,`${f(ppw)} × ${f(pph)}`,`${mm(ppw)} × ${mm(pph)}`)
+      :row('Print sheet',`${f(p.w)} × ${f(p.h)}`,`${mm(p.w)} × ${mm(p.h)}`);
+    $('dims').innerHTML=d;
+    $('gapnote').textContent=m.fmt==='flush'?'Blanks are cut ¼″ oversize on every side; you trim them flush after mounting.'
+      :m.mounted?'The blank is ½″ oversize on every side, and so is the backing; both get trimmed flush. Narrow seams are spaced with two strips of cardstock; wider ones have laser-cut spacers on the cut sheet.'
+      :'The cut file includes gap spacers: strips exactly as wide as each fold gap, to set the spacing while you glue.';
+    $('artsizes').textContent=`Print sheet for this board: ${f(p.w)} × ${f(p.h)} in. At 300 ppi that's about ${Math.ceil(p.w*300).toLocaleString()} × ${Math.ceil(p.h*300).toLocaleString()} px.`;
+    $('edgetip').textContent=m.wrapped?'Fill the whole template out to the cyan bleed band. The strip outside the dashed panel edges wraps around to the back, so give it a solid color that matches the board\'s edge.'
+      :'Fill the whole template out to the cyan bleed band. The outer edge is sliced flush through print and board together, so art that stops short of the trim line leaves a white sliver.';
+    $('guttertip').textContent=m.mounted
+      ?`Paint straight across the seams; the shaded strips are cut away, and the art on either side lines up again when the board is flat. Keep text and small icons ¼″ away from every seam.${m.rg.length?` The horizontal seam is the widest (${f(m.rg[0])}″), so don't put a play space on it.`:''}`
+      :m.cols>1?`The gaps between panels fold. Keep spaces, tracks and text at least ¼″ away from them, and never run a word across one.${m.rows>1?' On a quad board, the right half of the horizontal gap gets slit through the print, so treat it as a hard edge.':''}`
+      :'This board doesn\'t fold, so the only edges to respect are the outer ones. Keep text at least ¼″ in from the edge.';
+
+    $('exporttip').innerHTML=m.perPanel
+      ?'Delete the <code>GUIDES_delete-before-printing</code> group. Then select every rectangle in <code>ARTBOARDS_one-per-panel</code> and choose <b>Object › Artboards › Convert to Artboards</b>, which turns each panel into its own page. Delete anything left of that group, then export a PDF with <b>Use Artboards</b> on and no added bleed. You get one page per panel; check each page against the panel print size above.'
+      :'Delete the <code>GUIDES_delete-before-printing</code> group, export a PDF with no added bleed, and check the document size against the numbers above.';
+    const bx=m.box, fitsBox=((folded.w<=bx.w&&folded.h<=bx.d)||(folded.w<=bx.d&&folded.h<=bx.w))&&folded.th<=bx.h;
+    const printShort=Math.min(p.w,p.h), rollOK=printShort<=m.roll-0.5;
+    const chip=(ok,a,b,cc)=>`<div class="chip ${ok?'ok':'no'}"><span>${a}</span><b>${ok?b:cc}</b></div>`;
+    const big=c.count===1&&m.mounted;
+    $('fits').innerHTML=`<h3>Does it fit in the box?</h3>`+chip(fitsBox,`${m.fmt==='flush'?'Stacked boards':m.layers>1?'Folded board':'Board'} in a ${$('box').value} box`,'fits','too big')+
+      `<h3>How much chipboard does it take?</h3>`+chip(c.ok,
+        `${m.mounted&&!m.perPanel?`Mounting blank${m.ply>1?'s':''}`:`${c.count} ${m.fmt==='flush'||m.perPanel?'blanks':'panels'}${m.cg.length?' plus spacers':''}`} on ${m.half?`${nS} half sheet${nS>1?'s':''}`:`${nS} sheet${nS>1?'s':''}`}`,
+        (k=>`${k} 24 × 36 sheet${k>1?'s':''}`)(m.half?Math.ceil(nS/2):nS),'too big')+
+      (m.perPanel
+        ?`<h3>Does each panel fit a 12 × 18 sheet?</h3>`+chip((Math.min(ppw,pph)<=11.75&&Math.max(ppw,pph)<=17.75),`${f(ppw)} × ${f(pph)}″ panel print`,'fits','too big')
+        :`<h3>Does the print fit the roll?</h3>`+chip(rollOK,`${f(printShort)}″ across on a ${m.roll}″ roll`,'fits','too wide'))+
+      (rollOK||m.perPanel?'':`<p class="note">Most ${m.roll}″ printers can't print the last ¼″ on each side. Shrink the board slightly, or ask whether a wider roll is available.</p>`)+
+      `<p class="note">${pack.tooBig
+        ?(m.mounted&&!m.perPanel?'The mounting blank is bigger than a half sheet. It\'s a plain rectangle, so cut it by hand with a knife and straightedge, or choose the full 24 × 36 sheet above and reserve the Hanes 24 × 48. Printing one sheet per panel avoids the large blank entirely.':'Some parts are bigger than this sheet. Choose the full 24 × 36 sheet above, or make the board smaller.')
+        :m.half?`Cut each 24 × 36 chipboard sheet in half to 18 × 24 before you go. These layouts fit every BeAM laser.${pack.offcut.length?` Cut the ${pack.offcut.map(g=>f(g)+'″').join(' and ')} gap spacer${pack.offcut.length>1?'s':''} by hand from an offcut, 6–8″ long.`:''}`
+        :(m.mounted&&!m.perPanel?'The mounting blank is a plain rectangle. Laser-cut it at Hanes on the 24 × 48, or cut it by hand with a knife and straightedge anywhere.'
+        :'A full 24 × 36 sheet fits only the Hanes 24 × 48, which has limited open time. For any BeAM laser, choose the 18 × 24 half sheet above.')+
+          (pack.offcut.length?` Cut the ${pack.offcut.map(g=>f(g)+'″').join(' and ')} gap spacer${pack.offcut.length>1?'s':''} by hand from an offcut, 6–8″ long.`:'')}</p>`;
+
+    const G=g=>f(g)+'″';
+    $('why').innerHTML={
+      quad:`Fold it in half left to right first, face in, then fold it again top to bottom. The second fold wraps around two layers of board, so the horizontal gap is twice as wide as the vertical one (${G(m.rg[0]||0)} vs ${G(m.cg[0])}). On the right half of the horizontal gap, the print is slit and the backing paper becomes the hinge, which lets that half fold the opposite way.`,
+      bifold:`The print is the hinge: it spans the ${G(m.cg[0])} gap on the face side, and the backing paper spans it on the back. The gap is about twice the board thickness, which is what lets the two panels fold flat, face to face.`,
+      single:`A single panel doesn't fold. The print wraps around the edges for a finished look, and backing paper covers the turn-ins.`,
+      flush:`Flush boards skip the wrap. The art is mounted on oversize blanks and trimmed with the board in one cut, so the edges show bare board, like a punched tile.`,
+      mount4:`This is how most modern hobby boards are made. The art goes on first, the board is sliced into panels, and the backing paper is the only hinge. Pressing the backing down into each seam gives it the slack to fold. Fold left to right first, face in; the vertical seam needs only a ${G(m.cg[0])} gap. The second fold wraps around two layers, so the horizontal seam is wider, ${G(m.rg[0])}.`,
+      mount6:`This is how most modern hobby boards are made. The art goes on first, the board is sliced into panels, and the backing paper is the only hinge. Pressing the backing down into each seam gives it the slack to fold. Fold panel 1 onto panel 2, face in (${G(m.cg[0])} seam), then fold panel 3 over the stack (${G(m.cg[1])} seam, because it wraps one layer). Finally fold the three-layer stack top to bottom; that seam wraps the most board, so it's the widest, ${G(m.rg[0])}. The art ends up entirely inside.`
+    }[m.fmt];
+
+    let list;
+    if(m.fmt==='flush')list=[
+      ['Cut the blanks','Laser-cut the blanks from the cut sheet. They\'re ¼″ oversize on every side.'],
+      ['Mount the print','When the print comes back, cut it apart roughly, leaving the bleed. Spray adhesive on a blank, lay the print on it centered, and press it flat from the middle out with a brayer.'],
+      ['Trim flush','Once it\'s dry, put it face up on a cutting mat. Cut along the printed trim line with a fresh craft-knife blade and a steel ruler, cutting through print and board together in several light passes.'],
+      ['Seal','Spray a light coat of matte finish to protect the art from handling. Two thin coats beat one heavy one.']];
+    else if(m.perPanel)list=[
+      ['Cut the blanks',`Laser-cut the ${m.layers*m.ply} panel blanks from the cut sheet, each ¼″ oversize on every side${m.ply>1?'. Glue each pair together with PVA and dry them flat under weight overnight':''}.${m.cg.concat(m.rg).some(g=>g>=NARROW)?' Cut the gap spacers too.':''}`],
+      ['Mount each panel print','Each panel comes back on its own sheet. Spray adhesive on a blank, lay the panel print on it centered, and press it flat from the middle out with a brayer. Pencil the panel number on the back.'],
+      ['Trim each panel flush','Face up on a cutting mat, cut along the printed trim lines through print and board together, with a fresh blade, a steel ruler and several light passes. Trim carefully: these edges have to meet their neighbors, so the art lines up across each seam.'],
+      ['Lay out on the backing',`Cut backing paper (kraft, or book cloth for heavy use) ${f(m.BW+1)} × ${f(m.BH+1)}″. Spray it, then set the panels on it face up in order, lining the art up across each seam. Use two stacked strips of cardstock as the spacer in each narrow seam${m.cg.concat(m.rg).some(g=>g>=NARROW)?' and the laser-cut spacers in the wider ones':''}. Pull the spacers out before the glue sets.`],
+      ['Press the backing into the seams','Turn the board face down. Run a bone folder or the edge of a ruler firmly along every seam, pushing the backing down into the gap. This step is what gives each hinge enough slack to fold, so don\'t skip it.'],
+      ['Trim and fold',`Trim the backing flush with the board edge. Then fold it in order: ${m.fmt==='mount6'?'panel 1 onto 2, panel 3 over the stack, then top to bottom':'left to right, then top to bottom'}. Press it folded under books overnight.`],
+      ['Seal','Open it flat and give the face a light coat of matte finish.']];
+    else if(m.mounted)list=[
+      ['Cut the blank',`Cut a ${f(m.BW+1)} × ${f(m.BH+1)}″ blank, ½″ oversize on every side${m.ply>1?', plus a second one; glue them together with PVA and dry them flat under weight overnight':''}.${m.cg.concat(m.rg).some(g=>g>=NARROW)?' Laser-cut the gap spacers too.':''}`],
+      ['Mount the print','Spray adhesive on the blank and lay the print on it, centered. Press it flat from the middle out with a brayer, then let it dry under weight for an hour.'],
+      ['Slice the outline','Face up on a cutting mat, cut the outer trim line through print and board with a fresh blade and a steel ruler. Keep the blade vertical and make several light passes rather than one hard one.'],
+      ['Slice the seams',`Cut every seam line the same way. Where a seam has two lines, cut both and lift out the shaded strip. As each panel comes free, pencil its number (1–${m.layers}, left to right, top row first) on the back.`],
+      ['Lay out on the backing',`Cut backing paper (kraft, or book cloth for a board that will see heavy use) ${f(m.BW+1)} × ${f(m.BH+1)}″. Spray it, then set the panels on it face up in order. Use two stacked strips of cardstock as the spacer in each narrow seam${m.cg.concat(m.rg).some(g=>g>=NARROW)?' and the laser-cut spacers in the wider ones':''}. Pull the spacers out before the glue sets.`],
+      ['Press the backing into the seams','Turn the board face down. Run a bone folder or the edge of a ruler firmly along every seam, pushing the backing down into the gap. This step is what gives each hinge enough slack to fold, so don\'t skip it.'],
+      ['Trim and fold',`Trim the backing flush with the board edge. Then fold it in order: ${m.fmt==='mount6'?'panel 1 onto 2, panel 3 over the stack, then top to bottom':'left to right, then top to bottom'}. Press it folded under books overnight.`],
+      ['Seal','Open it flat and give the face a light coat of matte finish.']];
+    else{list=[
+      ['Cut the panels',`Laser-cut the ${m.layers*m.ply} panel${m.layers*m.ply>1?'s':''}${m.cols>1?' and the gap spacers':''}.${m.ply>1?' Glue each pair together with PVA under weight and let them dry flat overnight.':''}`],
+      ['Trim the print','When the print comes back, cut along the trim line, including the angled corners. Turn it face down on a clean sheet of paper.'],
+      ['Mark the back',`With a pencil and ruler, draw a line ${f(m.T)}″ in from every edge. That rectangle is where the board sits.`],
+      ['Glue the panels',`Spray adhesive on the top face of a panel, then set it into one corner of the pencil rectangle.${m.cols>1?' Stand a gap spacer against its edge, butt the next panel against the spacer, and press. Pull the spacers out before the glue sets.':''} Press everything flat with a brayer.`],
+      ['Wrap the edges','Spray the turn-in strips and fold them onto the back, long edges first. The angled corners tuck in neatly.']];
+      if(m.rows>1)list.push(['Slit the half seam','Turn the board face up. On the right half of the horizontal gap, cut through the print along the dotted slit line. Don\'t cut the left half.']);
+      list.push(['Add the backing',`Cut backing paper to ${f(m.BW-0.25)} × ${f(m.BH-0.25)}″ and glue it centered on the back${m.cols>1?', pressing it down into every gap. It covers the turn-ins and becomes the back hinge.':'. It covers the turn-ins.'}`]);
+      list.push(['Fold and seal',`${m.cols>1?(m.rows>1?'Fold it left to right, face in, then top to bottom, ':'Fold it closed, face in, ')+'and press it under books overnight. ':''}Then open it and give the face a light coat of matte finish.`]);
+    }
+    $('build').innerHTML=steps(list);
+  }
+
+  ['fmt','bw','bh','n','t','ply','ti','pm','sheet','box','roll'].forEach(id=>$(id).addEventListener('input',()=>{document.querySelectorAll('.pre').forEach(b=>b.setAttribute('aria-pressed','false'));render()}));
+  document.querySelectorAll('.pre').forEach(b=>b.addEventListener('click',()=>{
+    $('fmt').value=b.dataset.fmt; $('bw').value=b.dataset.w; $('bh').value=b.dataset.h; if(b.dataset.n)$('n').value=b.dataset.n;
+    $('box').value=b.dataset.box||'full';
+    document.querySelectorAll('.pre').forEach(x=>x.setAttribute('aria-pressed',String(x===b))); render();}));
+  ['tab-cut','tab-print'].forEach(id=>$(id).addEventListener('click',e=>{view=e.currentTarget.dataset.view;['tab-cut','tab-print'].forEach(t=>$(t).setAttribute('aria-pressed',String(t===id)));render()}));
+
+  const say=s=>{$('status').textContent=s};
+  function download(name,svg){
+    const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
+    const a=document.createElement('a'); a.href=url; a.download=name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+  $('dl').addEventListener('click',()=>{const it=last[view];download(it.name,it.svg);say('Downloaded '+it.name)});
+  $('dlall').addEventListener('click',()=>{
+    const files=allFiles();
+    files.forEach((it,i)=>setTimeout(()=>download(it.name,it.svg),i*400));
+    say(`Downloading ${files.length} files. If your browser asks, allow multiple downloads.`);
+  });
+  $('copy').addEventListener('click',async()=>{
+    const it=last[view];
+    try{await navigator.clipboard.writeText(it.svg);say('Copied. Paste into a text file named '+it.name)}
+    catch(e){let pre=document.querySelector('.actions + pre');if(!pre){pre=document.createElement('pre');document.querySelector('.actions').after(pre)}
+      pre.textContent=it.svg;const r=document.createRange();r.selectNodeContents(pre);const sel=getSelection();sel.removeAllRanges();sel.addRange(r);
+      say('Selected below. Copy it and save as '+it.name)}
+  });
+
+  render();
+})();
+</script>
+{% endraw %}

@@ -1,0 +1,427 @@
+---
+layout: default
+title: Game Box Dielines
+description: Laser cut files, wrap print templates, and assembly steps for a two-piece telescoping game box.
+---
+
+<section class="page-hero" style="background-image: url('{{ '/assets/images/hero/fabrication.png' | relative_url }}');">
+  <div class="hero-content">
+    <h1>Game Box Dielines</h1>
+    <p class="tagline">Laser cut files and print templates for your prototype box</p>
+  </div>
+</section>
+
+<section class="page-body kit">
+<div class="kit-wrap">
+  <p class="intro">Set the finished size of your box and the board you're cutting. The page draws a laser-ready base and telescoping lid, checks the fit on your sheet and the BeAM beds, and draws the print templates for the wrap. Making a board too? Use the <a href="board.html">Game Board Dielines</a> kit.</p>
+  <div class="main">
+    <form class="rail" id="form" onsubmit="return false">
+      <fieldset>
+        <legend>Class sizes</legend>
+        <div class="presets">
+          <button type="button" id="p-full" data-w="11.5" data-d="11.5" data-h="3" aria-pressed="true">Full · 11.5 × 11.5 × 3</button>
+          <button type="button" id="p-half" data-w="11.5" data-d="5.75" data-h="3" aria-pressed="false">Half · 11.5 × 5.75 × 3</button>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Finished box (inches)</legend>
+        <div class="row"><label for="w">Width<small>outside of the lid</small></label><input id="w" type="number" step="0.05" min="2" value="11.5"></div>
+        <div class="row"><label for="d">Depth<small>outside of the lid</small></label><input id="d" type="number" step="0.05" min="2" value="11.5"></div>
+        <div class="row"><label for="h">Height<small>closed box, lid on</small></label><input id="h" type="number" step="0.05" min="0.75" value="3"></div>
+        <div class="row"><label for="lidmode">Lid depth</label>
+          <select id="lidmode"><option value="full">Full (to the table)</option><option value="shallow">Shallow</option></select></div>
+        <div class="row" id="lidrow" hidden><label for="lidh">Shallow lid height</label><input id="lidh" type="number" step="0.05" min="0.5" value="1.25"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Material</legend>
+        <div class="row"><label for="t">Board thickness<small>60 pt chipboard = 0.060</small></label><input id="t" type="number" step="0.005" min="0.01" value="0.060"></div>
+        <div class="row"><label for="c">Lid clearance<small>air gap per side</small></label><input id="c" type="number" step="0.005" min="0" value="0.040"></div>
+        <div class="row"><label for="wp">Wrap paper<small>printed sheet thickness</small></label><input id="wp" type="number" step="0.001" min="0" value="0.006"></div>
+        <div class="row"><label for="sheet">Sheet</label>
+          <select id="sheet"><option value="24x36">24 × 36 (trimmed 26 × 38)</option><option value="18x24">18 × 24 (half of a 24 × 36)</option><option value="18x32">18 × 32</option><option value="24x48">24 × 48</option></select></div>
+      </fieldset>
+    </form>
+
+    <section class="stage" aria-label="Preview">
+      <div class="tabs" role="tablist">
+        <button type="button" id="tab-sheet" role="tab" aria-pressed="true" data-view="sheet">Cut sheet</button>
+        <button type="button" id="tab-base" role="tab" aria-pressed="false" data-view="wrapBase">Wrap · base</button>
+        <button type="button" id="tab-lid" role="tab" aria-pressed="false" data-view="wrapLid">Wrap · lid</button>
+      </div>
+      <div class="tabs" id="sheetpick" hidden></div>
+      <div class="canvas" id="canvas"></div>
+      <div class="legend" id="legend"></div>
+      <p class="warn" id="cutwarn">Send this file to the laser as you saved it. The Universal lasers read only pure red (#FF0000) as a cut and pure blue (#0000FF) as a score, at 0.001″. Recoloring, moving or rescaling a line, or switching an Illustrator file to CMYK, can make the laser skip it. A 0.001″ line looks faint or invisible in a browser; that's correct. To check it, zoom in to 400% or more, or use View › Outline in Illustrator.</p>
+      <div class="actions">
+        <button type="button" id="dl">Download this SVG</button>
+        <button type="button" id="dlall">Download all files</button>
+        <button type="button" id="copy">Copy SVG code</button>
+        <span class="status" id="status" role="status"></span>
+      </div>
+    </section>
+  </div>
+
+  <div class="specs">
+    <div class="card">
+      <h2>Dimensions</h2>
+      <table id="dims"></table>
+      <p class="note" id="boardfit"></p>
+    </div>
+    <div class="card">
+      <h2>Will it fit?</h2>
+      <div class="chips" id="fits"></div>
+      <p class="note">Bed sizes from BeAM: Murray has an 18 × 24 Universal and two 18 × 32 Trotecs; Hanes has an 18 × 24 and a 24 × 48 Universal; Carmichael has an 18 × 24.</p>
+    </div>
+    <div class="card">
+      <h2>Assembly</h2>
+      <p class="warn">Spraying isn't allowed at BeAM. Do every spray-adhesive and spray-finish step outdoors or in a well-ventilated room, over scrap cardboard.</p>
+      <ol>
+        <li>Cut a scrap test first. Tune the blue score so it cuts about halfway through the board without breaking out.</li>
+        <li>Fold each wall away from the scored face, so the score opens on the outside, where the wrap hides it.</li>
+        <li>Two facing walls run the full edge. The other two are trimmed by twice the board thickness, so they fit between the full walls at the corners instead of overlapping them. Join each inside corner with a strip of wetted gummed tape.</li>
+        <li>Print the wrap at 100% scale, extending art to the cyan bleed. Glue with PVA or spray mount, center the tray on the bottom panel, and fold the turn-in over the rim.</li>
+        <li>Test the lid on the wrapped base before gluing the lid's wrap. Adjust clearance here if it binds.</li>
+      </ol>
+    </div>
+  </div>
+
+  <section class="card art" id="box-art" aria-labelledby="art-h">
+    <h2 id="art-h">Box art, start to finish</h2>
+    <p class="lede">A full-depth lid covers the base completely when the box is closed. Put your effort into the <b>lid wrap</b>: its top panel is the cover and its four walls are what people see on the shelf. The base wrap can be a solid color or simple pattern.</p>
+    <p class="note" id="artsizes"></p>
+
+    <div class="steps">
+      <div class="step"><h3><span>1</span>Save the template</h3>
+        <p>Set your box size above, open the <b>Wrap · lid</b> tab, and save the SVG. Do the same for <b>Wrap · base</b>. Each file is drawn at real size, bleed included, so you never set a page size yourself.</p></div>
+
+      <div class="step"><h3><span>2</span>Open it in Illustrator</h3>
+        <p>UNC students get Adobe Creative Cloud free through Software Distribution. In Illustrator, choose <b>File › Open</b> and pick the SVG. Open <b>Window › Layers</b>: you'll see three groups.</p>
+        <ul>
+          <li><code>GUIDES_delete-before-printing</code> · the cyan bleed band and the panel labels</li>
+          <li><code>PRINT_fold-lines</code> · light gray dashes</li>
+          <li><code>PRINT_trim-line</code> · the outline you'll cut on</li>
+        </ul>
+        <p>Click the lock icon next to the layer that holds them.</p></div>
+
+      <div class="step"><h3><span>3</span>Make an art layer underneath</h3>
+        <p>Choose <b>Layer › New Layer</b>, name it <b>Art</b>, and drag it below the template layer. Do all your work on Art. Paint every panel right out to the outer edge of the cyan band, including the turn-in strips, which show inside the rim.</p>
+        <p>Bring in drawings or photos with <b>File › Place</b>. Make them at 300 ppi at the size they'll print, or they'll look soft.</p></div>
+
+      <div class="step"><h3><span>4</span>Keep type off the folds</h3>
+        <p>Keep titles, credits, and anything important at least ¼″ inside a fold or trim line. Folds wander a little when you glue, and type that crosses one will look shoddy.</p>
+        <p>The lid's top panel reads right side up with the <b>front wall</b> at the top of the file.</p></div>
+
+      <div class="step"><h3><span>5</span>Clean up and export</h3>
+        <p>Unlock the template, select the <code>GUIDES_delete-before-printing</code> group, and delete it. Leave the fold and trim lines; they're thin and light enough to disappear at the edges.</p>
+        <p>Choose <b>File › Save a Copy</b>, pick <b>Adobe PDF</b>, and use the <b>High Quality Print</b> preset. Under <b>Marks and Bleeds</b>, set every bleed to 0, because the file already includes it.</p></div>
+
+      <div class="step"><h3><span>6</span>Check the size before you print</h3>
+        <p>Open the PDF and check the document size against the numbers at the top of this section. If they don't match, something rescaled the file. Go back to step 1 rather than resizing by hand.</p></div>
+
+      <div class="step"><h3><span>7</span>Send your files to Dr. Gotzler</h3>
+        <p>Don't print these yourself. Large-format printing for the class is paid for and sent out together. Email your PDFs to <b class="sel">sgotzler@unc.edu</b>, one file per print, named by team and part: <code>teamname_lid.pdf</code>, <code>teamname_base.pdf</code>, <code>teamname_board.pdf</code>.</p>
+        <p>Every file is printed at 100% / actual size on matte paper, so what you exported in step 5 is exactly what comes back.</p></div>
+
+      <div class="step"><h3><span>8</span>Measure, then trim</h3>
+        <p>When your print comes back, the lid's top panel should measure <b id="artcheck"></b> between its fold lines. If it does, cut along the trim line with a craft knife and steel ruler, and continue with step 4 of Assembly above.</p></div>
+    </div>
+
+    <details>
+      <summary>Using Inkscape instead (free)</summary>
+      <p>Open the SVG with <b>File › Open</b>. In <b>Layers and Objects</b>, add a new layer below the template groups and work there. Place images with <b>File › Import</b>. Before exporting, delete the <code>GUIDES_delete-before-printing</code> group. Then choose <b>File › Save a Copy</b>, pick <b>PDF</b>, and keep the page size as it is. Steps 6 to 8 are the same.</p>
+    </details>
+  </section>
+</div>
+</section>
+
+<style>
+.kit{
+  --bg:#ffffff; --panel:#fafbfc; --ink:#1f2730; --head:#1a2028; --muted:#5e6770; --line:#dde1e5;
+  --accent:#E63946; --accent-dk:#B82E38; --accent-bg:#FCEBED;
+  --board:#c9bfa9; --cut:#E63946; --score:#2f5bd3; --bleed:#28a8b8; --ok:#2f7a3c; --warn:#B82E38;
+  --display:'League Spartan','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --body:'Source Sans 3','Source Sans Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'League Spartan','Helvetica Neue',Helvetica,Arial,sans-serif;
+  color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+}
+.kit .main{display:grid;grid-template-columns:320px minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:860px){.kit .main{grid-template-columns:minmax(0,1fr)}}
+.kit .rail{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px;display:grid;gap:18px}
+.kit fieldset{border:0;margin:0;padding:0;display:grid;gap:10px}
+.kit legend{font:600 13px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;font-size:15px}
+.kit .presets{display:flex;gap:8px;flex-wrap:wrap}
+.kit button{font:500 14px var(--body);color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:4px;padding:8px 12px;cursor:pointer}
+.kit button:hover{border-color:var(--ink)}
+.kit button:focus-visible,.kit input:focus-visible,.kit select:focus-visible{outline:2px solid var(--score);outline-offset:2px}
+.kit button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.kit .row{display:grid;grid-template-columns:1fr 104px;gap:10px;align-items:center}
+.kit label{font-size:14px}
+.kit label small{display:block;color:var(--muted);font-size:12px;line-height:1.35}
+.kit input,.kit select{font:500 14px var(--mono);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:7px 8px;width:100%;font-variant-numeric:tabular-nums}
+.kit .stage{display:grid;gap:12px;min-width:0}
+.kit .tabs{display:flex;gap:6px;flex-wrap:wrap}
+.kit .canvas{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;overflow-x:auto}
+.kit .canvas svg{display:block;width:100%;height:auto;max-height:70vh}
+.kit .canvas svg .cut{stroke:var(--cut)!important;vector-effect:non-scaling-stroke;stroke-width:1.4px!important}
+.kit .canvas svg .score{stroke:var(--score)!important;vector-effect:non-scaling-stroke;stroke-width:1.2px!important;stroke-dasharray:5 3}
+.kit .canvas svg .fold{stroke:var(--score)!important;vector-effect:non-scaling-stroke;stroke-width:1px!important;stroke-dasharray:5 3}
+.kit .canvas svg .trim{stroke:var(--ink)!important;vector-effect:non-scaling-stroke;stroke-width:1.2px!important}
+.kit .canvas svg .bleedzone{stroke:var(--bleed)!important;stroke-opacity:.45!important}
+.kit .canvas svg .artarea{fill:var(--panel)!important}
+.kit .canvas svg .sheet{fill:var(--board)!important;opacity:.35;stroke:var(--muted)!important;vector-effect:non-scaling-stroke;stroke-width:1px!important}
+.kit .canvas svg text{fill:var(--muted)!important}
+.kit .legend{display:flex;gap:16px;flex-wrap:wrap;font:12px var(--mono);color:var(--muted)}
+.kit .legend span::before{content:"";display:inline-block;width:18px;height:0;border-top:2px solid currentColor;vertical-align:middle;margin-right:6px}
+.kit .legend .l-cut{color:var(--cut)}
+.kit .legend .l-score{color:var(--score)}
+.kit .legend .l-bleed{color:var(--bleed)}
+.kit .legend .l-trim{color:var(--ink)}
+.kit .legend .l-score::before{border-top-style:dashed}
+.kit .legend .l-bleed::before{height:8px;border-top:0;background:currentColor;opacity:.45}
+.kit .actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.kit .status{font-size:13px;color:var(--muted)}
+.kit .specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.kit .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px;min-width:0}
+.kit h2{font:600 22px/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase;margin:0 0 12px}
+.kit table{width:100%;border-collapse:collapse;font:13px var(--mono);font-variant-numeric:tabular-nums}
+.kit th{text-align:left;font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--line)}
+.kit td{padding:7px 0;border-bottom:1px solid var(--line)}
+.kit td:not(:first-child),.kit th:not(:first-child){text-align:right}
+.kit .chips{display:grid;gap:8px;margin-top:4px}
+.kit .chips h3{font:500 11px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 0}
+.kit .chips h3:first-child{margin-top:0}
+.kit .chip{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:8px 10px;border-radius:4px;border:1px solid var(--line)}
+.kit .chip b{font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.kit .chip.ok b{color:var(--ok)}
+.kit .chip.no b{color:var(--warn)}
+.kit ol{margin:0;padding-left:20px;display:grid;gap:8px;max-width:68ch}
+.kit .note{font-size:13px;color:var(--muted);margin:10px 0 0}
+.kit pre{white-space:pre-wrap;word-break:break-all;font:11px var(--mono);max-height:180px;overflow:auto;background:var(--bg);padding:8px;border-radius:4px}
+.kit .legend a{color:var(--score);font:12px var(--mono)}
+.kit .warn{font-size:13px;line-height:1.45;margin:0 0 12px;padding:8px 10px;border-left:3px solid var(--warn);background:var(--bg);color:var(--ink);max-width:72ch}
+.kit .stage .warn{margin:0}
+.kit .pick-label{font-size:13px;color:var(--muted);align-self:center;margin-right:4px}
+.kit .art{display:grid;gap:14px}
+.kit .art h2{margin:0}
+.kit .lede{margin:0;max-width:72ch}
+.kit .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.kit .step{border-top:2px solid var(--ink);padding-top:10px;min-width:0}
+.kit .step h3{font:600 18px/1.15 var(--display);letter-spacing:.04em;text-transform:uppercase;margin:0 0 6px;display:flex;gap:10px;align-items:baseline}
+.kit .step h3 span{font:500 12px var(--mono);color:var(--cut)}
+.kit .step p,.kit .step ul{margin:0 0 8px;font-size:14px}
+.kit .step ul{padding-left:18px}
+.kit .sel{user-select:all;font-family:var(--mono);font-weight:500}
+.kit code{font:12px var(--mono);background:var(--bg);padding:1px 4px;border-radius:3px;word-break:break-all}
+.kit details{border-top:1px solid var(--line);padding-top:10px}
+.kit summary{cursor:pointer;font-weight:600}
+.kit details p{max-width:72ch;font-size:14px}
+.kit *,.kit *::before,.kit *::after{box-sizing:border-box}
+.kit [hidden]{display:none!important}
+.kit .main{grid-template-columns:22rem minmax(0,1fr)}
+@media (max-width:860px){.kit .main{grid-template-columns:minmax(0,1fr)}}
+.kit .row{grid-template-columns:minmax(0,1fr) 10.5rem}
+.kit.page-body{padding:4rem 0 5rem}
+.kit .kit-wrap{max-width:74rem;margin:0 auto;padding:0 2rem;display:grid;gap:2rem}
+@media (max-width:38rem){.kit .kit-wrap{padding:0 1.5rem}}
+.kit .intro{margin:0;max-width:44rem;font-size:1.0625rem}
+.kit h2{font:800 1.45rem/1.15 var(--display);color:var(--head);letter-spacing:-.005em;text-transform:none;margin:0 0 .8rem}
+.kit h3{color:var(--head)}
+.kit legend{font:700 .78rem/1 var(--display);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.kit .rail,.kit .card,.kit .canvas{border-radius:3px}
+.kit button{font:700 .78rem/1 var(--display);letter-spacing:.12em;text-transform:uppercase;padding:.75em 1em;border-radius:2px;color:var(--head)}
+.kit button:hover{border-color:var(--accent);color:var(--accent)}
+.kit button[aria-pressed="true"]{background:var(--head);border-color:var(--head);color:#fff}
+.kit .presets button{text-transform:none;letter-spacing:.02em;font-weight:600;font-size:.85rem}
+.kit #dl,.kit #dlall{background:var(--accent);border-color:var(--accent);color:#fff}
+.kit #dl:hover,.kit #dlall:hover{background:var(--accent-dk);border-color:var(--accent-dk);color:#fff}
+.kit input,.kit select{font:500 .95rem var(--body);background:#fff}
+.kit table,.kit td{font-family:var(--body);font-size:.9rem}
+.kit th{font:700 .7rem var(--display);letter-spacing:.14em}
+.kit .chips h3,.kit .legend{font-family:var(--display);font-weight:700;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase}
+.kit .chip b{font:700 .72rem var(--display);letter-spacing:.12em}
+.kit code,.kit .sel,.kit pre{font-family:ui-monospace,Menlo,Consolas,monospace}
+.kit .warn{background:var(--accent-bg);border-left:3px solid var(--accent);color:var(--ink);font-size:.92rem;padding:.6em .9em}
+.kit .step{border-top:2px solid var(--head)}
+.kit .step h3{font:700 1.05rem/1.2 var(--display);letter-spacing:.01em;text-transform:none}
+.kit .step h3 span{font:800 .85rem var(--display);color:var(--accent)}
+.kit .step p,.kit .step ul{font-size:.95rem}
+.kit .lede{font-size:1rem}
+.kit .note{font-size:.88rem}
+.kit a{color:var(--accent)}
+.kit .legend a{color:var(--accent);font-family:var(--display)}
+.kit ol li{margin-bottom:0}
+
+</style>
+
+{% raw %}
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const f=n=>(+n).toFixed(3).replace(/\.?0+$/,'')||'0';
+  const mm=n=>Math.round(n*25.4);
+  let view='sheet', last={}, cutPart='both', cutFiles=[];
+  const allFiles=()=>[...cutFiles,last.wrapBase,last.wrapLid];
+
+  function trayNet(W,D,H,t){
+    const p=[[H,0],[H+W,0],[H+W,H+t],[W+2*H,H+t],[W+2*H,H+D-t],[H+W,H+D-t],[H+W,D+2*H],[H,D+2*H],[H,H+D-t],[0,H+D-t],[0,H+t],[H,H+t]];
+    const folds=[[H,H,H+W,H],[H,H+D,H+W,H+D],[H,H+t,H,H+D-t],[H+W,H+t,H+W,H+D-t]];
+    return {w:W+2*H,h:D+2*H,p,folds};
+  }
+  function wrapNet(W,D,H){
+    const T=Math.min(0.75,Math.max(0.4,H*0.3)), tab=0.6, K=H+T;
+    const p=[[K,0],[K+W,0],[K+W,T],[K+W+tab,T],[K+W+tab,K],[W+2*K,K],[W+2*K,K+D],[K+W+tab,K+D],[K+W+tab,K+D+H],[K+W,K+D+H],[K+W,D+2*K],[K,D+2*K],[K,K+D+H],[K-tab,K+D+H],[K-tab,K+D],[0,K+D],[0,K],[K-tab,K],[K-tab,T],[K,T]];
+    const folds=[[K,K,K+W,K],[K,K+D,K+W,K+D],[K,K,K,K+D],[K+W,K,K+W,K+D],
+      [K,T,K+W,T],[K,D+2*K-T,K+W,D+2*K-T],[T,K,T,K+D],[W+2*K-T,K,W+2*K-T,K+D],
+      [K+W,T,K+W,K],[K,T,K,K],[K+W,K+D,K+W,K+D+H],[K,K+D,K,K+D+H]];
+    return {w:W+2*K,h:D+2*K,p,folds,T};
+  }
+  const poly=(p,dx,dy)=>'M'+p.map(([x,y])=>f(x+dx)+' '+f(y+dy)).join(' L')+' Z';
+  const lines=(L,dx,dy)=>L.map(([a,b,c,d])=>`M${f(a+dx)} ${f(b+dy)} L${f(c+dx)} ${f(d+dy)}`).join(' ');
+  const HAIR=0.001;
+
+  function compute(){
+    const W=+$('w').value, D=+$('d').value, H=+$('h').value, t=+$('t').value, c=+$('c').value, wp=+$('wp').value;
+    const lidFull=$('lidmode').value==='full';
+    const lid={W,D,H:lidFull?H:Math.min(+$('lidh').value,H)};
+    const lidIn={W:W-2*t,D:D-2*t};
+    const base={W:lidIn.W-2*(c+wp),D:lidIn.D-2*(c+wp),H:H-t-0.03};
+    const baseIn={W:base.W-2*t,D:base.D-2*t,H:base.H-t};
+    const [sw,sh]=$('sheet').value.split('x').map(Number);
+    return {W,D,H,t,c,wp,lid,lidIn,base,baseIn,sw,sh};
+  }
+
+  // part: 'both' (side by side), 'base' or 'lid' (one pattern on its own sheet)
+  function sheetSVG(m,preview,part='both'){
+    const b=trayNet(m.base.W,m.base.D,m.base.H,m.t), l=trayNet(m.lid.W,m.lid.D,m.lid.H,m.t);
+    const gap=0.25, margin=0.25;
+    const L=Math.max(m.sw,m.sh), S=Math.min(m.sw,m.sh);
+    const needL=margin*2+b.w+gap+l.w, needS=margin*2+Math.max(b.h,l.h);
+    const fits=needL<=L&&needS<=S;
+    const alone=n=>n.w+2*margin<=L&&n.h+2*margin<=S;
+    const items=part==='both'?[[b,'BASE',margin,margin+(Math.max(b.h,l.h)-b.h)/2],[l,'LID',margin+b.w+gap,margin+(Math.max(b.h,l.h)-l.h)/2]]
+      :[[part==='base'?b:l,part==='base'?'BASE':'LID',margin,margin]];
+    const useW=part==='both'?needL:items[0][0].w+2*margin, useH=part==='both'?needS:items[0][0].h+2*margin;
+    const vw=preview?Math.max(L,useW):useW, vh=preview?Math.max(S,useH):useH;
+    const lab=(x,y,s)=>preview?`<text x="${f(x)}" y="${f(y)}" font-family="IBM Plex Mono,monospace" font-size="0.45" text-anchor="middle">${s}</text>`:'';
+    const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${f(vw)}in" height="${f(vh)}in" viewBox="0 0 ${f(vw)} ${f(vh)}">`+
+      (preview?`<rect class="sheet" x="0" y="0" width="${L}" height="${S}" fill="#c9bfa9" stroke="#777" stroke-width="${HAIR}"/>`:'')+
+      `<g fill="none">`+items.map(([n,,x,y])=>
+        `<path class="cut" d="${poly(n.p,x,y)}" stroke="#FF0000" stroke-width="${HAIR}"/>`+
+        `<path class="score" d="${lines(n.folds,x,y)}" stroke="#0000FF" stroke-width="${HAIR}"/>`).join('')+
+      `</g>`+items.map(([n,name,x,y])=>lab(x+n.w/2,y+n.h/2,name)).join('')+
+      (preview?lab(L/2,S-0.25,`${S} × ${L} sheet`):'')+`</svg>`;
+    return {svg,fits,needL,needS,b,l,baseAlone:alone(b),lidAlone:alone(l)};
+  }
+
+  function wrapSVG(tray,name,preview=false){
+    const n=wrapNet(tray.W,tray.D,tray.H), B=0.125, pad=B+0.1;
+    const vw=n.w+pad*2, vh=n.h+pad*2;
+    const P='0.0035'; // 0.25 pt
+    const labels=`<text x="${f(vw/2)}" y="${f(pad+n.T+(tray.H)/2)}" font-family="IBM Plex Mono,monospace" font-size="0.35" text-anchor="middle" fill="#777">${name} · front wall</text>`+
+      `<text x="${f(vw/2)}" y="${f(vh/2)}" font-family="IBM Plex Mono,monospace" font-size="0.4" text-anchor="middle" fill="#777">${name==='LID'?'LID TOP · cover art':'BASE BOTTOM'}</text>`;
+    const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${f(vw)}in" height="${f(vh)}in" viewBox="0 0 ${f(vw)} ${f(vh)}">`+
+      `<g id="GUIDES_delete-before-printing" fill="none">`+
+        `<path class="bleedzone" d="${poly(n.p,pad,pad)}" stroke="#00B4D8" stroke-opacity="0.35" stroke-width="${B*2}" stroke-linejoin="miter"/>`+
+        (preview?`<path class="artarea" d="${poly(n.p,pad,pad)}" fill="#FFFFFF" stroke="none"/>`:'')+
+        labels+`</g>`+
+      `<g id="PRINT_fold-lines" fill="none"><path class="fold" d="${lines(n.folds,pad,pad)}" stroke="#BBBBBB" stroke-width="${P}" stroke-dasharray="0.06 0.06"/></g>`+
+      `<g id="PRINT_trim-line" fill="none"><path class="trim" d="${poly(n.p,pad,pad)}" stroke="#555555" stroke-width="${P}"/></g>`+
+      `</svg>`;
+    return {svg,w:vw,h:vh,T:n.T};
+  }
+
+  function halfNote(m,s){
+    const L=Math.max(m.sw,m.sh), S=Math.min(m.sw,m.sh);
+    if(S<=18&&L<=24) return '';
+    const hL=Math.max(L/2,S), hS=Math.min(L/2,S), mg=0.5;
+    const fit=n=>(n.w+mg<=hL&&n.h+mg<=hS)||(n.h+mg<=hL&&n.w+mg<=hS);
+    const both=fit(s.b)&&fit(s.l);
+    const bedOK=(hS<=18&&hL<=24)?'every BeAM laser, including all three at Murray':(hS<=18&&hL<=32?'the Murray Trotecs':'');
+    if(!bedOK) return '';
+    return `<p class="note">${both
+      ?`To cut at Murray, halve the sheet to ${f(hS)} × ${f(hL)} first and choose ${f(hS)} × ${f(hL)} as the sheet above. Each half holds one pattern, base or lid, and fits ${bedOK}.`
+      :`Halving the sheet to ${f(hS)} × ${f(hL)} makes it fit ${bedOK}, but at this box size a pattern won't fit on a half. Cut at Hanes on the 24 × 48.`}</p>`;
+  }
+
+  function render(){
+    const m=compute(); $('lidrow').hidden=$('lidmode').value==='full';
+    const s=sheetSVG(m,true);
+    const layouts=s.fits?['both']:['base','lid'];
+    if(!layouts.includes(cutPart))cutPart=layouts[0];
+    const sp=sheetSVG(m,true,cutPart), sx=sheetSVG(m,false,cutPart);
+    const nameFor=p=>`box-cut-${f(m.W)}x${f(m.D)}x${f(m.H)}${p==='both'?'':'-'+p}.svg`;
+    cutFiles=layouts.map(p=>({svg:sheetSVG(m,false,p).svg,name:nameFor(p)}));
+    const pick=$('sheetpick');
+    pick.hidden=view!=='sheet'||layouts.length<2;
+    pick.innerHTML=layouts.length<2?'':`<span class="pick-label">This box needs two sheets.</span>`+layouts.map(p=>`<button type="button" data-part="${p}" aria-pressed="${p===cutPart}">${p==='base'?'Sheet 1 · base':'Sheet 2 · lid'}</button>`).join('');
+    pick.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{cutPart=b.dataset.part;render()}));
+    const wb=wrapSVG(m.base,'BASE'), wl=wrapSVG(m.lid,'LID');
+    const wbP=wrapSVG(m.base,'BASE',true), wlP=wrapSVG(m.lid,'LID',true);
+    $('artsizes').textContent=`For this box: lid wrap ${f(wl.w)} × ${f(wl.h)} in, base wrap ${f(wb.w)} × ${f(wb.h)} in. At 300 ppi, lid art is about ${Math.ceil(wl.w*300).toLocaleString()} × ${Math.ceil(wl.h*300).toLocaleString()} px.`;
+    $('artcheck').textContent=`${f(m.lid.W)}″ × ${f(m.lid.D)}″`;
+    last={sheet:{svg:sx.svg,name:`box-cut-${f(m.W)}x${f(m.D)}x${f(m.H)}${cutPart==='both'?'':'-'+cutPart}.svg`},
+          wrapBase:{svg:wb.svg,name:`box-wrap-base-${f(m.W)}x${f(m.D)}.svg`},
+          wrapLid:{svg:wl.svg,name:`box-wrap-lid-${f(m.W)}x${f(m.D)}.svg`}};
+    $('canvas').innerHTML=view==='sheet'?sp.svg:(view==='wrapBase'?wbP.svg:wlP.svg);
+    $('cutwarn').hidden=view!=='sheet';
+    $('legend').innerHTML=view==='sheet'
+      ?'<span class="l-cut">cut · red hairline</span><span class="l-score">score · blue hairline</span>'
+      :'<span class="l-trim">trim line</span><span class="l-score">fold</span><span class="l-bleed">bleed · extend art ⅛″ past trim</span><a href="#box-art">How to design and print this</a>';
+
+    const row=(k,a,b)=>`<tr><td>${k}</td><td>${a}</td><td>${b}</td></tr>`;
+    const d3=o=>`${f(o.W)} × ${f(o.D)}${o.H!==undefined?' × '+f(o.H):''}`;
+    $('dims').innerHTML='<tr><th>Part</th><th>Inches</th><th>mm</th></tr>'+
+      row('Lid, outside',d3(m.lid),`${mm(m.lid.W)} × ${mm(m.lid.D)} × ${mm(m.lid.H)}`)+
+      row('Base, outside',d3(m.base),`${mm(m.base.W)} × ${mm(m.base.D)} × ${mm(m.base.H)}`)+
+      row('Usable inside',d3(m.baseIn),`${mm(m.baseIn.W)} × ${mm(m.baseIn.D)} × ${mm(m.baseIn.H)}`)+
+      row('Base, flat pattern',`${f(s.b.w)} × ${f(s.b.h)}`,`${mm(s.b.w)} × ${mm(s.b.h)}`)+
+      row('Lid, flat pattern',`${f(s.l.w)} × ${f(s.l.h)}`,`${mm(s.l.w)} × ${mm(s.l.h)}`)+
+      row('Base wrap print',`${f(wb.w)} × ${f(wb.h)}`,`${mm(wb.w)} × ${mm(wb.h)}`)+
+      row('Lid wrap print',`${f(wl.w)} × ${f(wl.h)}`,`${mm(wl.w)} × ${mm(wl.h)}`);
+    const panel=Math.min(m.baseIn.W,m.baseIn.D)-0.15;
+    $('boardfit').textContent=`Folded boards and tiles up to about ${f(Math.floor(panel*8)/8)}″ on a side fit flat inside, leaving room for fingers to lift them out.`;
+
+    const beds=[['24 × 48 Universal · Hanes',24,48],['18 × 32 Trotecs (2) · Murray',18,32],['18 × 24 Universals · Murray, Hanes, Carmichael',18,24]];
+    const fitsBed=(a,b)=>beds.map(([n,x,y])=>{const ok=(a<=x&&b<=y)||(a<=y&&b<=x);return `<div class="chip ${ok?'ok':'no'}"><span>${n}</span><b>${ok?'fits':'too big'}</b></div>`}).join('');
+    const sheetChip=`<div class="chip ${s.fits||(m.sw*m.sh===432&&s.baseAlone&&s.lidAlone)?'ok':'no'}"><span>Base and lid, side by side</span><b>${s.fits?'yes':m.sw*m.sh===432?'2 halves of one sheet':'needs 2 sheets'}</b></div>`+
+      (s.fits?'':(!s.baseAlone||!s.lidAlone?`<p class="note">At this box size, the ${!s.lidAlone?'lid':'base'} pattern is too big for a ${Math.min(m.sw,m.sh)} × ${Math.max(m.sw,m.sh)} sheet. Choose a larger sheet above.</p>`:''));
+    $('fits').innerHTML=`<h3>Does one sheet make a whole box?</h3>`+sheetChip+
+      `<h3>Which lasers take ${Math.min(m.sw,m.sh)===18?'an':'a'} ${Math.min(m.sw,m.sh)} × ${Math.max(m.sw,m.sh)} sheet?</h3>`+fitsBed(Math.min(m.sw,m.sh),Math.max(m.sw,m.sh))+halfNote(m,s);
+  }
+
+  ['w','d','h','t','c','wp','lidh','lidmode','sheet'].forEach(id=>$(id).addEventListener('input',()=>{['p-full','p-half'].forEach(p=>$(p).setAttribute('aria-pressed','false'));render()}));
+  ['p-full','p-half'].forEach(id=>$(id).addEventListener('click',e=>{
+    const b=e.currentTarget; $('w').value=b.dataset.w; $('d').value=b.dataset.d; $('h').value=b.dataset.h;
+    ['p-full','p-half'].forEach(p=>$(p).setAttribute('aria-pressed',String(p===id))); render();}));
+  ['tab-sheet','tab-base','tab-lid'].forEach(id=>$(id).addEventListener('click',e=>{
+    view=e.currentTarget.dataset.view; ['tab-sheet','tab-base','tab-lid'].forEach(t=>$(t).setAttribute('aria-pressed',String(t===id))); render();}));
+
+  const say=s=>{$('status').textContent=s};
+  function download(name,svg){
+    const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
+    const a=document.createElement('a'); a.href=url; a.download=name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+  $('dl').addEventListener('click',()=>{const it=last[view];download(it.name,it.svg);say('Downloaded '+it.name)});
+  $('dlall').addEventListener('click',()=>{
+    const files=allFiles();
+    files.forEach((it,i)=>setTimeout(()=>download(it.name,it.svg),i*400));
+    say(`Downloading ${files.length} files. If your browser asks, allow multiple downloads.`);
+  });
+  $('copy').addEventListener('click',async()=>{
+    const it=last[view];
+    try{await navigator.clipboard.writeText(it.svg);say('Copied. Paste into a text file named '+it.name)}
+    catch(e){
+      let pre=document.querySelector('.actions + pre');
+      if(!pre){pre=document.createElement('pre');document.querySelector('.actions').after(pre)}
+      pre.textContent=it.svg; const r=document.createRange(); r.selectNodeContents(pre);
+      const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      say('Selected below. Copy it and save as '+it.name);
+    }
+  });
+
+  render();
+})();
+</script>
+{% endraw %}
