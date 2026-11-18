@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Fabrication
-description: Laser cut layouts and print templates for building your prototype â€” boards and boxes for classroom fabrication.
+description: Laser cut layouts and print templates for prototype game boards and boxes.
 ---
 
 <section class="page-hero" style="background-image: url('{{ '/assets/images/hero/fabrication.png' | relative_url }}');">
@@ -11,22 +11,37 @@ description: Laser cut layouts and print templates for building your prototype â
   </div>
 </section>
 
-<section class="page-body">
-  <div class="kit-wrap">
-    <p class="intro">Pick a kit. Each page generates laser-cut files and print templates sized to the classroom's chipboard and box stock.</p>
-    <ul class="fabrication-index">
-      <li>
-        <a href="board.html">
-          <h2>Game Board Dielines</h2>
-          <p>Lays out the chipboard for cutting and draws the print template for your art. Wrapped, mounted, and flat formats; sizes checked against the class box.</p>
-        </a>
-      </li>
-      <li>
-        <a href="box.html">
-          <h2>Game Box Dielines</h2>
-          <p>Builds the box that holds your folded board. Size the lid and base, generate cut lines, and confirm your board fits inside.</p>
-        </a>
-      </li>
-    </ul>
+<section class="page-body fab-index">
+  <div class="inner">
+    <p class="lead">Two kits for building your physical prototype. Each one draws laser-ready cut files and print templates right in your browser, sized to the class chipboard. Pick your dimensions, download the SVGs, and take them to the cutter.</p>
+
+    <div class="kit-cards">
+      <a class="kit-card" href="{{ '/fabrication/board.html' | relative_url }}">
+        <span class="kit-label">Kit 01 &middot; Boards</span>
+        <h2>Game Board Dielines</h2>
+        <p>Wrapped bifold and quad-fold boards, mounted 4- and 6-panel boards, and flush-trimmed player boards. Lays out the chipboard for cutting, draws the print template for your art, and checks that the folded board fits in a class box.</p>
+        <span class="kit-go">Open the board kit &rarr;</span>
+      </a>
+      <a class="kit-card" href="{{ '/fabrication/box.html' | relative_url }}">
+        <span class="kit-label">Kit 02 &middot; Boxes</span>
+        <h2>Game Box Dielines</h2>
+        <p>A two-piece telescoping box: a laser-ready base and lid sized to your game, a fit check against your sheet and the BeAM laser beds, and print templates for the wrap.</p>
+        <span class="kit-go">Open the box kit &rarr;</span>
+      </a>
+    </div>
   </div>
 </section>
+
+<style>
+.fab-index .lead{max-width:44rem;font-size:1.15rem;color:#4a5560;margin:0 0 2.8rem}
+.fab-index .kit-cards{display:grid;grid-template-columns:1fr;gap:1.5rem}
+@media (min-width:48rem){.fab-index .kit-cards{grid-template-columns:1fr 1fr}}
+.fab-index .kit-card{display:flex;flex-direction:column;padding:2rem 2rem 1.8rem;background:#fafbfc;color:#1f2730;border:solid 1px rgba(0,0,0,.12);border-top:solid 3px #1a2028;border-radius:3px;transition:border-color .15s ease,transform .15s ease,box-shadow .15s ease}
+.fab-index .kit-card:hover{color:#1f2730;border-color:rgba(0,0,0,.12);border-top-color:#E63946;transform:translateY(-2px);box-shadow:0 10px 24px rgba(26,32,40,.08)}
+.fab-index .kit-label{font-family:'League Spartan',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#5e6770;margin-bottom:.9rem}
+.fab-index .kit-card h2{margin:0 0 .6em;font-size:1.6rem}
+.fab-index .kit-card p{margin:0 0 1.6em;flex:1}
+.fab-index .kit-go{font-family:'League Spartan',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#E63946}
+.fab-index .kit-card:hover .kit-go{color:#B82E38}
+@media (prefers-reduced-motion:reduce){.fab-index .kit-card{transition:none}.fab-index .kit-card:hover{transform:none}}
+</style>
